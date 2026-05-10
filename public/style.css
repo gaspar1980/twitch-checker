@@ -181,6 +181,11 @@ body {
   color: var(--purple);
 }
 
+.footer-sep {
+  margin: 0 6px;
+  color: var(--text-dim);
+}
+
 .dashboard-footer {
   text-align: center;
   color: var(--text-dim);
