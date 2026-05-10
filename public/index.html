@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-TW" id="html-root">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Twitch Channel Checker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="landing-wrap">
+    <section class="landing-hero">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="36" height="36">
+          <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/>
+        </svg>
+        <span id="txt-logo"></span>
+      </div>
+
+      <div class="lang-switcher" id="lang-switcher"></div>
+
+      <h1 id="txt-h1"></h1>
+      <p class="hero-sub" id="txt-sub"></p>
+
+      <div id="error-msg" class="error-banner" style="display:none"></div>
+
+      <a href="/auth/login" class="btn-twitch btn-hero" id="txt-login-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+          <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/>
+        </svg>
+        <span id="txt-login"></span>
+      </a>
+      <p class="privacy-note" id="txt-privacy"></p>
+    </section>
+
+    <section class="landing-features">
+      <h2 class="section-title" id="txt-features-title"></h2>
+      <div class="features-grid" id="features-grid"></div>
+    </section>
+
+    <section class="landing-steps">
+      <h2 class="section-title" id="txt-steps-title"></h2>
+      <div class="steps-row" id="steps-row"></div>
+    </section>
+
+    <footer class="landing-footer">
+      <p id="txt-footer"></p>
+    </footer>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script>
+    const FEATURE_ICONS = { chatbot: '🤖', alerts: '🔔', growth: '📈', raids: '⚔️', roles: '👥', panels: '🔗' };
+    const FEATURE_KEYS  = ['chatbot', 'alerts', 'growth', 'raids', 'roles', 'panels'];
+
+    function render() {
+      document.getElementById('html-root').lang = getLang();
+      document.title = t('site.title');
+      document.getElementById('txt-logo').textContent    = t('site.logo');
+      document.getElementById('txt-h1').textContent      = t('hero.h1');
+      document.getElementById('txt-sub').textContent     = t('hero.sub');
+      document.getElementById('txt-login').textContent   = t('hero.loginBtn');
+      document.getElementById('txt-privacy').textContent = t('hero.privacyNote');
+      document.getElementById('txt-features-title').textContent = t('features.title');
+      document.getElementById('txt-steps-title').textContent    = t('steps.title');
+      document.getElementById('txt-footer').textContent  = t('footer.note');
+      document.getElementById('lang-switcher').innerHTML = langSwitcherHTML();
+
+      // Features
+      document.getElementById('features-grid').innerHTML = FEATURE_KEYS.map(key => {
+        const tags = t(`features.${key}.tags`);
+        const tagsHtml = (Array.isArray(tags) ? tags : []).map(tag =>
+          `<span class="ftag">${tag}</span>`).join('');
+        return `<div class="feature-card">
+          <div class="feature-card-icon">${FEATURE_ICONS[key]}</div>
+          <h3>${t(`features.${key}.title`)}</h3>
+          <p>${t(`features.${key}.desc`)}</p>
+          <div class="feature-tag-list">${tagsHtml}</div>
+        </div>`;
+      }).join('');
+
+      // Steps
+      document.getElementById('steps-row').innerHTML = `
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div><strong>${t('steps.s1.title')}</strong><p>${t('steps.s1.desc')}</p></div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div><strong>${t('steps.s2.title')}</strong><p>${t('steps.s2.desc')}</p></div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div><strong>${t('steps.s3.title')}</strong><p>${t('steps.s3.desc')}</p></div>
+        </div>`;
+
+      // Error from URL
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('error')) {
+        const el = document.getElementById('error-msg');
+        const key = params.get('error');
+        const knownKeys = ['auth_failed', 'no_code', 'access_denied'];
+        el.textContent = knownKeys.includes(key) ? t(`errors.${key}`) : t('errors.default') + key;
+        el.style.display = 'block';
+      }
+    }
+
+    function onLangChange() { render(); }
+
+    render();
+  </script>
+</body>
+</html>

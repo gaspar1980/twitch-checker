@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-TW" id="html-root">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Twitch Channel Checker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="logo small">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+          <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/>
+        </svg>
+        <span id="txt-logo"></span>
+      </div>
+      <div class="top-bar-right">
+        <div class="lang-switcher" id="lang-switcher"></div>
+        <div id="user-info" class="user-info"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <div class="dashboard-header">
+      <h1 id="txt-dashboard-title"></h1>
+      <button id="btn-check" class="btn-twitch" onclick="runCheck()">
+        <span id="btn-label"></span>
+      </button>
+    </div>
+
+    <div id="results" style="display:none">
+      <section class="check-card" id="card-chatbot">
+        <div class="card-header">
+          <span class="card-icon">🤖</span>
+          <div>
+            <h2 id="card-chatbot-title"></h2>
+            <p class="card-desc" id="card-chatbot-desc"></p>
+          </div>
+          <div id="chatbot-status" class="status-badge"></div>
+        </div>
+        <div id="chatbot-detail" class="card-body"></div>
+      </section>
+
+      <section class="check-card" id="card-alerts">
+        <div class="card-header">
+          <span class="card-icon">🔔</span>
+          <div>
+            <h2 id="card-alerts-title"></h2>
+            <p class="card-desc" id="card-alerts-desc"></p>
+          </div>
+          <a id="card-alerts-link"
+             href="https://help.twitch.tv/s/article/setup-alerts-by-twitch?language=zh_TW"
+             target="_blank" rel="noopener noreferrer"
+             class="status-badge status-link"></a>
+        </div>
+        <div id="alerts-detail" class="card-body"></div>
+      </section>
+
+      <section class="check-card" id="card-growth">
+        <div class="card-header">
+          <span class="card-icon">📈</span>
+          <div>
+            <h2 id="card-growth-title"></h2>
+            <p class="card-desc" id="card-growth-desc"></p>
+          </div>
+          <div id="growth-status" class="status-badge"></div>
+        </div>
+        <div id="growth-detail" class="card-body"></div>
+      </section>
+
+      <section class="check-card" id="card-raids">
+        <div class="card-header">
+          <span class="card-icon">⚔️</span>
+          <div>
+            <h2 id="card-raids-title"></h2>
+            <p class="card-desc" id="card-raids-desc"></p>
+          </div>
+          <div id="raids-status" class="status-badge"></div>
+        </div>
+        <div id="raids-detail" class="card-body"></div>
+      </section>
+
+      <section class="check-card" id="card-roles">
+        <div class="card-header">
+          <span class="card-icon">👥</span>
+          <div>
+            <h2 id="card-roles-title"></h2>
+            <p class="card-desc" id="card-roles-desc"></p>
+          </div>
+          <a id="card-roles-link" href="#" target="_blank" rel="noopener noreferrer"
+             class="status-badge status-link"></a>
+        </div>
+        <div id="roles-detail" class="card-body"></div>
+      </section>
+
+      <section class="check-card" id="card-panels">
+        <div class="card-header">
+          <span class="card-icon">🔗</span>
+          <div>
+            <h2 id="card-panels-title"></h2>
+            <p class="card-desc" id="card-panels-desc"></p>
+          </div>
+          <div id="panels-status" class="status-badge"></div>
+        </div>
+        <div id="panels-detail" class="card-body"></div>
+      </section>
+    </div>
+
+    <div id="loading" style="display:none" class="loading-wrap">
+      <div class="spinner"></div>
+      <p id="txt-loading"></p>
+    </div>
+
+    <div id="error-wrap" style="display:none" class="error-banner"></div>
+  </main>
+
+  <script src="i18n.js"></script>
+  <script>
+    // ── Cache last API result so we can re-render on lang change ────
+    let _lastData = null;
+
+    // ── Static text rendering ────────────────────────────────────────
+    function renderStaticText() {
+      document.getElementById('html-root').lang = getLang();
+      document.title = t('site.title');
+      document.getElementById('txt-logo').textContent = t('site.logo');
+      document.getElementById('txt-dashboard-title').textContent = t('dashboard.title');
+      document.getElementById('btn-label').textContent = t('dashboard.startBtn');
+      document.getElementById('txt-loading').textContent = t('dashboard.loading');
+      document.getElementById('lang-switcher').innerHTML = langSwitcherHTML();
+
+      document.getElementById('card-chatbot-title').textContent = t('cards.chatbot.title');
+      document.getElementById('card-chatbot-desc').textContent  = t('cards.chatbot.desc');
+      document.getElementById('card-alerts-title').textContent  = t('cards.alerts.title');
+      document.getElementById('card-alerts-desc').textContent   = t('cards.alerts.desc');
+      document.getElementById('card-alerts-link').textContent   = t('cards.alerts.goSetup');
+      document.getElementById('card-growth-title').textContent  = t('cards.growth.title');
+      document.getElementById('card-growth-desc').textContent   = t('cards.growth.desc');
+      document.getElementById('card-raids-title').textContent   = t('cards.raids.title');
+      document.getElementById('card-raids-desc').textContent    = t('cards.raids.desc');
+      document.getElementById('card-roles-title').textContent   = t('cards.roles.title');
+      document.getElementById('card-roles-desc').textContent    = t('cards.roles.desc');
+      document.getElementById('card-roles-link').textContent    = t('cards.roles.goSetup');
+      document.getElementById('card-panels-title').textContent  = t('cards.panels.title');
+      document.getElementById('card-panels-desc').textContent   = t('cards.panels.desc');
+    }
+
+    // ── How-to renderer ──────────────────────────────────────────────
+    function renderHowTo(feature, defaultOpen) {
+      const data = tHowto(feature);
+      if (!data) return '';
+      const sections = data.sections.map(s => `
+        <div class="howto-section">
+          <div class="howto-section-title">${s.name}</div>
+          <ol class="howto-ol">${s.steps.map(step => `<li>${step}</li>`).join('')}</ol>
+        </div>`).join('');
+      return `<details class="howto-box"${defaultOpen ? ' open' : ''}>
+        <summary class="howto-toggle">${t('howto.prefix')}${data.title}</summary>
+        <div class="howto-body">${sections}</div>
+      </details>`;
+    }
+
+    // ── Auth ─────────────────────────────────────────────────────────
+    async function loadUser() {
+      const res = await fetch('/api/me');
+      if (!res.ok) { window.location.href = '/'; return; }
+      const { user } = await res.json();
+      document.getElementById('user-info').innerHTML = `
+        <img src="${user.profileImage}" alt="${user.displayName}" class="avatar" />
+        <span>${user.displayName}</span>
+        <a href="/auth/logout" class="btn-logout" id="txt-logout"></a>`;
+      document.getElementById('txt-logout').textContent = t('dashboard.logout');
+    }
+
+    // ── Status badge ─────────────────────────────────────────────────
+    function setStatus(elId, type) {
+      const el = document.getElementById(elId);
+      const map = {
+        ok:          [t('status.ok'),          'status-ok'],
+        notDetected: [t('status.notDetected'),  'status-no'],
+        unknown:     [t('status.unknown'),       'status-unknown'],
+        updated:     [t('status.updated'),       'status-ok'],
+        listening:   [t('status.listening'),     'status-ok'],
+        failed:      [t('status.failed'),        'status-no'],
+        unavailable: [t('status.unavailable'),   'status-unknown'],
+      };
+      const [label, cls] = map[type] || [type, 'status-unknown'];
+      el.textContent = label;
+      el.className = 'status-badge ' + cls;
+    }
+
+    // ── Chatbot ──────────────────────────────────────────────────────
+    function renderChatbot(data) {
+      setStatus('chatbot-status', data.detected ? 'ok' : 'notDetected');
+      const el = document.getElementById('chatbot-detail');
+      let html = '';
+      if (data.detected) {
+        const rows = data.bots.map(b => `
+          <div class="bot-row">
+            <span class="bot-name">@${b.login}</span>
+            <span class="bot-type">${t('chatbot.modRole')}</span>
+          </div>`).join('');
+        html = `<p class="result-summary">${t('chatbot.detected', { count: data.bots.length })}</p>
+                <div class="bot-list">${rows}</div>`;
+      } else {
+        html = `<p class="result-summary no-result">${t('chatbot.notDetected')}</p>
+                <p class="hint">${t('chatbot.hint')}</p>`;
+      }
+      el.innerHTML = html + renderHowTo('chatbot', !data.detected);
+    }
+
+    // ── Alerts (static guide) ────────────────────────────────────────
+    function renderAlerts() {
+      const el = document.getElementById('alerts-detail');
+      const events = t('alerts.events');
+      const eventsHtml = [
+        ['👤', events.follower], ['⭐', events.subscribe], ['🎁', events.gift],
+        ['💎', events.bits],     ['⚔️', events.raid],      ['🔥', events.hype],
+      ].map(([icon, label]) =>
+        `<div class="alert-event-item"><span class="alert-event-icon">${icon}</span><span>${label}</span></div>`
+      ).join('');
+
+      el.innerHTML = `
+        <p class="result-summary" style="margin-bottom:16px">${t('alerts.intro')}</p>
+        <div class="alerts-events-grid">${eventsHtml}</div>
+        <a href="https://help.twitch.tv/s/article/setup-alerts-by-twitch?language=zh_TW"
+           target="_blank" rel="noopener noreferrer" class="alerts-official-btn">
+          ${t('alerts.officialBtn')}
+        </a>
+        ${renderHowTo('alerts', true)}`;
+    }
+
+    // ── Growth ───────────────────────────────────────────────────────
+    function formatDelta(delta) {
+      if (delta === null) return `<span class="delta-neutral">${t('growth.firstQuery')}</span>`;
+      if (delta > 0) return `<span class="delta-up">▲ +${delta.toLocaleString()}</span>`;
+      if (delta < 0) return `<span class="delta-down">▼ ${delta.toLocaleString()}</span>`;
+      return `<span class="delta-neutral">${t('growth.noChange')}</span>`;
+    }
+
+    function renderGrowth(data) {
+      setStatus('growth-status', 'updated');
+      const el = document.getElementById('growth-detail');
+
+      const prevLabel = data.previousChecked
+        ? t('growth.prevCheck', { date: new Date(data.previousChecked).toLocaleString() })
+        : t('growth.firstCheck');
+
+      const followerRow = data.followerCount !== null
+        ? `<div class="stat-card">
+            <div class="stat-label">${t('growth.followers')}</div>
+            <div class="stat-value">${data.followerCount.toLocaleString()}</div>
+            <div class="stat-delta">${formatDelta(data.followerDelta)}</div>
+          </div>`
+        : `<div class="stat-card stat-na">
+            <div class="stat-label">${t('growth.followers')}</div>
+            <div class="stat-value stat-na-text">—</div>
+            <div class="stat-sub">${t('growth.notAvailable')}</div>
+          </div>`;
+
+      const subsRow = data.subscriberCount !== null
+        ? `<div class="stat-card">
+            <div class="stat-label">${t('growth.subscribers')}</div>
+            <div class="stat-value">${data.subscriberCount.toLocaleString()}</div>
+            <div class="stat-delta">${formatDelta(data.subDelta)}</div>
+            ${data.subscriberPoints != null ? `<div class="stat-sub">${t('growth.subPoints', { pts: data.subscriberPoints.toLocaleString() })}</div>` : ''}
+          </div>`
+        : `<div class="stat-card stat-na">
+            <div class="stat-label">${t('growth.subscribers')}</div>
+            <div class="stat-value stat-na-text">—</div>
+            <div class="stat-sub">${t('growth.noAffiliate')}</div>
+          </div>`;
+
+      const snaps = (data.snapshots || []).slice(-10);
+      let chartHtml = '';
+      if (snaps.length >= 2) {
+        const maxF = Math.max(...snaps.map(s => s.followerCount || 0));
+        const minF = Math.min(...snaps.map(s => s.followerCount || 0));
+        const range = maxF - minF || 1;
+        const bars = snaps.map(s => {
+          const h = Math.max(4, Math.round(((s.followerCount || 0) - minF) / range * 48));
+          const label = new Date(s.ts).toLocaleDateString(getLang(), { month: 'numeric', day: 'numeric' });
+          return `<div class="chart-bar-wrap" title="${label}: ${(s.followerCount||0).toLocaleString()}">
+            <div class="chart-bar" style="height:${h}px"></div></div>`;
+        }).join('');
+        chartHtml = `<div class="chart-wrap">
+          <div class="chart-title">${t('growth.trend', { count: snaps.length })}</div>
+          <div class="chart-bars">${bars}</div>
+          <div class="chart-labels"><span>${minF.toLocaleString()}</span><span>${maxF.toLocaleString()}</span></div>
+        </div>`;
+      }
+
+      el.innerHTML = `
+        <p class="result-summary prev-check">${prevLabel}</p>
+        <div class="stats-grid">${followerRow}${subsRow}</div>
+        ${chartHtml}
+        ${renderHowTo('growth', data.subscriberCount === null)}`;
+    }
+
+    // ── Raids ────────────────────────────────────────────────────────
+    function renderRaids(data) {
+      setStatus('raids-status', data.listening ? 'listening' : 'failed');
+      const el = document.getElementById('raids-detail');
+
+      const subStatusHtml = data.subscriptionStatus.map(s => {
+        const dir = s.direction === 'incoming' ? t('raids.incoming') : t('raids.outgoing');
+        const badge = s.status === 'created'
+          ? `<span class="raid-sub-badge new">${t('raids.badgeNew')}</span>`
+          : s.status === 'already_exists'
+          ? `<span class="raid-sub-badge ok">${t('raids.badgeExists')}</span>`
+          : `<span class="raid-sub-badge err">${t('raids.badgeErr')}</span>`;
+        return `<span class="raid-sub-item">${dir} ${badge}</span>`;
+      }).join('');
+
+      const summaryHtml = `
+        <div class="raid-summary">
+          <div class="raid-summary-item">
+            <span class="raid-summary-icon">📥</span>
+            <div>
+              <div class="raid-summary-val">${data.incoming.length}</div>
+              <div class="raid-summary-label">${t('raids.summaryIn')}</div>
+            </div>
+            <div class="raid-viewers">${t('raids.viewers', { count: data.totalViewersReceived.toLocaleString() })}</div>
+          </div>
+          <div class="raid-summary-item">
+            <span class="raid-summary-icon">📤</span>
+            <div>
+              <div class="raid-summary-val">${data.outgoing.length}</div>
+              <div class="raid-summary-label">${t('raids.summaryOut')}</div>
+            </div>
+            <div class="raid-viewers">${t('raids.viewers', { count: data.totalViewersSent.toLocaleString() })}</div>
+          </div>
+        </div>`;
+
+      let listHtml = '';
+      if (data.raids.length === 0) {
+        listHtml = `<p class="hint" style="margin:12px 0">${t('raids.noRecords')}</p>`;
+      } else {
+        const rows = data.raids.slice(0, 20).map(r => {
+          const isIn = r.direction === 'incoming';
+          const partner = isIn ? r.from : r.to;
+          return `<div class="raid-row">
+            <span class="raid-dir ${isIn ? 'in' : 'out'}">${isIn ? t('raids.dirIn') : t('raids.dirOut')}</span>
+            <span class="raid-partner">
+              <a href="https://twitch.tv/${partner.login}" target="_blank" rel="noopener noreferrer">${partner.displayName}</a>
+            </span>
+            <span class="raid-viewers-badge">${t('raids.viewerCount', { count: (r.viewers || 0).toLocaleString() })}</span>
+            <span class="raid-time">${new Date(r.occurredAt).toLocaleString(getLang())}</span>
+          </div>`;
+        }).join('');
+        listHtml = `
+          <p class="result-summary" style="margin:16px 0 10px">${t('raids.recentRecords', { count: Math.min(data.raids.length, 20) })}</p>
+          <div class="raid-list">${rows}</div>
+          ${data.raids.length > 20 ? `<p class="hint" style="margin-top:10px">${t('raids.showMore', { count: data.raids.length })}</p>` : ''}`;
+      }
+
+      el.innerHTML = `
+        <div class="raid-sub-status">${subStatusHtml}</div>
+        ${summaryHtml}
+        ${listHtml}
+        ${renderHowTo('raids', data.raids.length === 0)}`;
+    }
+
+    // ── Roles ────────────────────────────────────────────────────────
+    function renderRoles(data) {
+      const el = document.getElementById('roles-detail');
+
+      // Update manage link with actual login
+      if (_lastData?.user?.login) {
+        document.getElementById('card-roles-link').href =
+          t('roles.manageUrl', { login: _lastData.user.login });
+      }
+
+      function roleSection(key, labelKey, descKey, users, err) {
+        const label = t(`roles.${labelKey}`);
+        const desc  = t(`roles.${descKey}`);
+        let body = '';
+        if (err) {
+          body = `<span class="role-error">${t('roles.errorFetch')}</span>`;
+        } else if (users.length === 0) {
+          body = `<span class="role-empty">${t('roles.empty', { role: label })}</span>`;
+        } else {
+          body = users.map(u =>
+            `<a class="role-pill" href="https://twitch.tv/${u.login}" target="_blank" rel="noopener noreferrer">
+              <span class="role-pill-avatar">${u.displayName.charAt(0).toUpperCase()}</span>
+              <span class="role-pill-name">${u.displayName}</span>
+              <span class="role-pill-login">@${u.login}</span>
+            </a>`
+          ).join('');
+        }
+        const count = err ? '' : `<span class="role-count">${t('roles.totalCount', { count: users.length })}</span>`;
+        return `
+          <div class="role-group">
+            <div class="role-group-header">
+              <span class="role-group-icon">${key === 'moderators' ? '🛡️' : key === 'editors' ? '✏️' : '⭐'}</span>
+              <div class="role-group-info">
+                <span class="role-group-label">${label}</span>
+                <span class="role-group-desc">${desc}</span>
+              </div>
+              ${count}
+            </div>
+            <div class="role-pills">${body}</div>
+          </div>`;
+      }
+
+      el.innerHTML = `
+        <a href="${t('roles.manageUrl', { login: _lastData?.user?.login || '' })}"
+           target="_blank" rel="noopener noreferrer" class="roles-manage-btn">
+          ${t('roles.manageBtn')}
+        </a>
+        <div class="roles-grid">
+          ${roleSection('moderators', 'moderators', 'modDesc',    data.moderators, data.modError)}
+          ${roleSection('editors',    'editors',    'editorDesc', data.editors,    data.editorError)}
+          ${roleSection('vips',       'vips',       'vipDesc',    data.vips,       data.vipError)}
+        </div>`;
+    }
+
+    // ── Panels ───────────────────────────────────────────────────────
+    function renderPanels(data) {
+      const el = document.getElementById('panels-detail');
+
+      if (!data.available) {
+        setStatus('panels-status', 'unavailable');
+        el.innerHTML = `<p class="result-summary no-result">${t('panels.unavailable')}</p>` + renderHowTo('panels', true);
+        return;
+      }
+
+      if (data.detected) {
+        document.getElementById('panels-status').textContent = t('panels.linksCount', { count: data.socialLinks.length });
+        document.getElementById('panels-status').className = 'status-badge status-ok';
+        const rows = data.socialLinks.map(l => `
+          <a class="social-row" href="${l.url}" target="_blank" rel="noopener noreferrer">
+            <span class="social-icon">${l.icon}</span>
+            <span class="social-platform">${l.platform}</span>
+            <span class="social-url">${l.url}</span>
+            <span class="social-arrow">↗</span>
+          </a>`).join('');
+        el.innerHTML = `
+          <p class="result-summary">${t('panels.found', { total: data.totalPanels, count: data.socialLinks.length })}</p>
+          <div class="social-list">${rows}</div>
+          ${renderHowTo('panels', false)}`;
+      } else {
+        setStatus('panels-status', 'notDetected');
+        el.innerHTML = `
+          <p class="result-summary no-result">${t('panels.notFound', { count: data.totalPanels })}</p>
+          <p class="hint">${t('panels.hint')}</p>
+          ${renderHowTo('panels', true)}`;
+      }
+    }
+
+    // ── Run check ────────────────────────────────────────────────────
+    async function runCheck() {
+      document.getElementById('results').style.display = 'none';
+      document.getElementById('error-wrap').style.display = 'none';
+      document.getElementById('loading').style.display = 'flex';
+      document.getElementById('btn-check').disabled = true;
+      document.getElementById('btn-label').textContent = t('dashboard.checkingBtn');
+
+      try {
+        const res = await fetch('/api/check');
+        if (!res.ok) { const e = await res.json(); throw new Error(e.error || 'check failed'); }
+        _lastData = await res.json();
+        renderResults();
+        document.getElementById('results').style.display = 'block';
+      } catch (err) {
+        const el = document.getElementById('error-wrap');
+        el.textContent = t('dashboard.error') + err.message;
+        el.style.display = 'block';
+      } finally {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('btn-check').disabled = false;
+        document.getElementById('btn-label').textContent = t('dashboard.recheckBtn');
+      }
+    }
+
+    function renderResults() {
+      if (!_lastData) return;
+      renderChatbot(_lastData.chatbot);
+      renderAlerts();
+      renderGrowth(_lastData.growth);
+      renderRaids(_lastData.raids);
+      renderRoles(_lastData.roles);
+      renderPanels(_lastData.panels);
+    }
+
+    // ── Lang change callback ─────────────────────────────────────────
+    function onLangChange() {
+      renderStaticText();
+      // Update logout button text
+      const logoutEl = document.getElementById('txt-logout');
+      if (logoutEl) logoutEl.textContent = t('dashboard.logout');
+      // Re-render result cards with new language if data exists
+      if (_lastData) {
+        renderResults();
+      }
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────
+    renderStaticText();
+    loadUser().then(() => runCheck());
+  </script>
+</body>
+</html>
