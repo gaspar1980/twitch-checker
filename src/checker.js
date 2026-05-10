@@ -343,4 +343,74 @@ async function checkRaids(broadcasterId) {
   };
 }
 
-module.exports = { checkChatbots, checkGrowth, checkRaids, checkRoles };
+/**
+ * Fetch channel emotes and badges.
+ * Emotes: GET /helix/chat/emotes  (no extra scope)
+ * Badges: GET /helix/chat/badges  (no extra scope)
+ * Both return image URLs at 1x / 2x / 4x
+ */
+async function checkEmotesBadges(userToken, broadcasterId) {
+  const headers = twitchHeaders(userToken);
+
+  const [emotesRes, badgesRes] = await Promise.allSettled([
+    axios.get('https://api.twitch.tv/helix/chat/emotes', {
+      headers,
+      params: { broadcaster_id: broadcasterId },
+    }),
+    axios.get('https://api.twitch.tv/helix/chat/badges', {
+      headers,
+      params: { broadcaster_id: broadcasterId },
+    }),
+  ]);
+
+  const emotes = emotesRes.status === 'fulfilled'
+    ? (emotesRes.value.data.data || []).map(e => ({
+        id: e.id,
+        name: e.name,
+        tier: e.tier || null,
+        type: e.emote_type,
+        image1x: e.images?.url_1x || null,
+        image2x: e.images?.url_2x || null,
+        image4x: e.images?.url_4x || null,
+      }))
+    : [];
+
+  // Badges: each set has multiple versions (1 month, 3 months etc.)
+  const badges = badgesRes.status === 'fulfilled'
+    ? (badgesRes.value.data.data || []).map(set => ({
+        setId: set.set_id,
+        versions: set.versions.map(v => ({
+          id: v.id,
+          title: v.title,
+          description: v.description,
+          image1x: v.image_url_1x,
+          image2x: v.image_url_2x,
+          image4x: v.image_url_4x,
+        })),
+      }))
+    : [];
+
+  // Group emotes by type
+  const subEmotes  = emotes.filter(e => e.type === 'subscriptions');
+  const bitsEmotes = emotes.filter(e => e.type === 'bitstier');
+  const otherEmotes = emotes.filter(e => e.type !== 'subscriptions' && e.type !== 'bitstier');
+
+  return {
+    emotes: {
+      total: emotes.length,
+      subscription: subEmotes,
+      bits: bitsEmotes,
+      other: otherEmotes,
+      hasAffiliate: emotes.length > 0,
+    },
+    badges: {
+      total: badges.length,
+      sets: badges,
+    },
+    emoteError:  emotesRes.status === 'rejected' ? emotesRes.reason?.message : null,
+    badgeError:  badgesRes.status === 'rejected' ? badgesRes.reason?.message : null,
+    checkedAt: new Date().toISOString(),
+  };
+}
+
+module.exports = { checkChatbots, checkGrowth, checkRaids, checkRoles, checkEmotesBadges };

@@ -907,6 +907,91 @@ details[open] .howto-toggle::after { transform: rotate(180deg); }
   .raid-summary { grid-template-columns: 1fr; }
 }
 
+/* Emotes & Badges */
+.eb-section {
+  margin-bottom: 20px;
+}
+
+.eb-section-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eb-count {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-weight: 400;
+}
+
+.emote-group {
+  margin-bottom: 14px;
+}
+
+.emote-group-label {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.emote-group-count {
+  background: rgba(145,71,255,0.15);
+  color: var(--purple-light);
+  border-radius: 8px;
+  padding: 1px 7px;
+  font-size: 0.72rem;
+}
+
+.emote-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.emote-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-card2);
+  border-radius: var(--radius);
+  padding: 8px;
+  width: 72px;
+  transition: background 0.15s;
+}
+
+.emote-item:hover { background: rgba(145,71,255,0.1); }
+
+.emote-item img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.emote-name {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-align: center;
+  word-break: break-all;
+  line-height: 1.2;
+  max-width: 100%;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 /* Roles */
 .roles-manage-btn {
   display: inline-flex;

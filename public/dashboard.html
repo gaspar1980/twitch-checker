@@ -90,6 +90,18 @@
         <div id="raids-detail" class="card-body"></div>
       </section>
 
+      <section class="check-card" id="card-emotes-badges">
+        <div class="card-header">
+          <span class="card-icon">😄</span>
+          <div>
+            <h2 id="card-emotes-title"></h2>
+            <p class="card-desc" id="card-emotes-desc"></p>
+          </div>
+          <div id="emotes-status" class="status-badge"></div>
+        </div>
+        <div id="emotes-detail" class="card-body"></div>
+      </section>
+
       <section class="check-card" id="card-roles">
         <div class="card-header">
           <span class="card-icon">👥</span>
@@ -144,6 +156,8 @@
       document.getElementById('card-growth-desc').textContent   = t('cards.growth.desc');
       document.getElementById('card-raids-title').textContent   = t('cards.raids.title');
       document.getElementById('card-raids-desc').textContent    = t('cards.raids.desc');
+      document.getElementById('card-emotes-title').textContent  = t('cards.emotesBadges.title');
+      document.getElementById('card-emotes-desc').textContent   = t('cards.emotesBadges.desc');
       document.getElementById('card-roles-title').textContent   = t('cards.roles.title');
       document.getElementById('card-roles-desc').textContent    = t('cards.roles.desc');
       document.getElementById('card-roles-link').textContent    = t('cards.roles.goSetup');
@@ -365,6 +379,98 @@
         ${renderHowTo('raids', data.raids.length === 0)}`;
     }
 
+    // ── Emotes & Badges ──────────────────────────────────────────────
+    function renderEmotesBadges(data) {
+      const el = document.getElementById('emotes-detail');
+      const login = _lastData?.user?.login || '';
+
+      const totalEmotes = data.emotes.total;
+      const totalBadgeSets = data.badges.total;
+      const hasContent = totalEmotes > 0 || totalBadgeSets > 0;
+
+      if (hasContent) {
+        setStatus('emotes-status', 'ok');
+      } else {
+        setStatus('emotes-status', 'notDetected');
+      }
+
+      // Emotes section
+      function emoteGroup(groupKey, emotes) {
+        if (!emotes.length) return '';
+        const imgs = emotes.map(e =>
+          `<div class="emote-item" title="${e.name}">
+            <img src="${e.image2x || e.image1x}" alt="${e.name}" loading="lazy" />
+            <span class="emote-name">${e.name}</span>
+          </div>`
+        ).join('');
+        return `<div class="emote-group">
+          <div class="emote-group-label">${t(`emotesBadges.${groupKey}`)}
+            <span class="emote-group-count">${emotes.length}</span>
+          </div>
+          <div class="emote-grid">${imgs}</div>
+        </div>`;
+      }
+
+      let emotesHtml = '';
+      if (data.emoteError) {
+        emotesHtml = `<p class="hint">${t('emotesBadges.noEmotes')}</p>`;
+      } else if (totalEmotes === 0) {
+        emotesHtml = `<p class="result-summary no-result">${t('emotesBadges.noEmotes')}</p>`;
+      } else {
+        emotesHtml =
+          emoteGroup('subEmotes', data.emotes.subscription) +
+          emoteGroup('bitsEmotes', data.emotes.bits) +
+          emoteGroup('otherEmotes', data.emotes.other);
+      }
+
+      // Badges section
+      function badgeSetName(setId) {
+        if (setId === 'subscriber') return t('emotesBadges.badgeSetSub');
+        if (setId === 'bits') return t('emotesBadges.badgeSetBits');
+        return t('emotesBadges.badgeSetOther') + ` (${setId})`;
+      }
+
+      let badgesHtml = '';
+      if (data.badgeError) {
+        badgesHtml = `<p class="hint">${t('emotesBadges.noBadges')}</p>`;
+      } else if (totalBadgeSets === 0) {
+        badgesHtml = `<p class="result-summary no-result">${t('emotesBadges.noBadges')}</p>`;
+      } else {
+        badgesHtml = data.badges.sets.map(set => {
+          const imgs = set.versions.map(v =>
+            `<div class="emote-item" title="${v.title}">
+              <img src="${v.image2x || v.image1x}" alt="${v.title}" loading="lazy" />
+              <span class="emote-name">${v.title}</span>
+            </div>`
+          ).join('');
+          return `<div class="emote-group">
+            <div class="emote-group-label">${badgeSetName(set.setId)}
+              <span class="emote-group-count">${set.versions.length}</span>
+            </div>
+            <div class="emote-grid">${imgs}</div>
+          </div>`;
+        }).join('');
+      }
+
+      el.innerHTML = `
+        <a href="${t('emotesBadges.manageEmoteUrl', { login })}"
+           target="_blank" rel="noopener noreferrer" class="roles-manage-btn">
+          ${t('emotesBadges.manageEmoteBtn')}
+        </a>
+        <div class="eb-section">
+          <div class="eb-section-title">😄 ${t('emotesBadges.emotesTitle')}
+            ${totalEmotes > 0 ? `<span class="eb-count">${t('emotesBadges.totalEmotes', { count: totalEmotes })}</span>` : ''}
+          </div>
+          ${emotesHtml}
+        </div>
+        <div class="eb-section">
+          <div class="eb-section-title">🏅 ${t('emotesBadges.badgesTitle')}
+            ${totalBadgeSets > 0 ? `<span class="eb-count">${t('emotesBadges.totalBadges', { count: totalBadgeSets })}</span>` : ''}
+          </div>
+          ${badgesHtml}
+        </div>`;
+    }
+
     // ── Roles ────────────────────────────────────────────────────────
     function renderRoles(data) {
       const el = document.getElementById('roles-detail');
@@ -456,6 +562,7 @@
       renderAlerts();
       renderGrowth(_lastData.growth);
       renderRaids(_lastData.raids);
+      renderEmotesBadges(_lastData.emotesBadges);
       renderRoles(_lastData.roles);
     }
 
