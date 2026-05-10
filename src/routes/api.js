@@ -1,5 +1,5 @@
 const express = require('express');
-const { checkChatbots, checkPanels, checkGrowth, checkRaids, checkRoles } = require('../checker');
+const { checkChatbots, checkGrowth, checkRaids, checkRoles } = require('../checker');
 const router = express.Router();
 
 function requireAuth(req, res, next) {
@@ -19,9 +19,8 @@ router.get('/check', requireAuth, async (req, res) => {
   const { accessToken, user } = req.session;
 
   try {
-    const [chatbotResult, panelResult, growthResult, raidResult, rolesResult] = await Promise.all([
+    const [chatbotResult, growthResult, raidResult, rolesResult] = await Promise.all([
       checkChatbots(accessToken, user.id),
-      checkPanels(accessToken, user.id),
       checkGrowth(accessToken, user.id),
       checkRaids(user.id),
       checkRoles(accessToken, user.id),
@@ -30,7 +29,6 @@ router.get('/check', requireAuth, async (req, res) => {
     res.json({
       user,
       chatbot: chatbotResult,
-      panels: panelResult,
       growth: growthResult,
       raids: raidResult,
       roles: rolesResult,
@@ -85,15 +83,5 @@ router.get('/check/roles', requireAuth, async (req, res) => {
   }
 });
 
-// GET /api/check/panels — panels social links only
-router.get('/check/panels', requireAuth, async (req, res) => {
-  const { accessToken, user } = req.session;
-  try {
-    const result = await checkPanels(accessToken, user.id);
-    res.json(result);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
 
 module.exports = router;

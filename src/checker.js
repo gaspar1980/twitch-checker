@@ -296,109 +296,6 @@ async function checkGrowth(userToken, broadcasterId) {
   };
 }
 
-const SOCIAL_PLATFORMS = [
-  { name: 'Twitter / X',  icon: '🐦',  patterns: [/twitter\.com/i, /\bx\.com\//i] },
-  { name: 'YouTube',      icon: '📺',  patterns: [/youtube\.com/i, /youtu\.be/i] },
-  { name: 'Instagram',    icon: '📷',  patterns: [/instagram\.com/i] },
-  { name: 'TikTok',       icon: '🎵',  patterns: [/tiktok\.com/i] },
-  { name: 'Discord',      icon: '💬',  patterns: [/discord\.gg/i, /discord\.com\/invite/i] },
-  { name: 'Facebook',     icon: '👥',  patterns: [/facebook\.com/i, /\bfb\.com\//i] },
-  { name: 'Patreon',      icon: '💰',  patterns: [/patreon\.com/i] },
-  { name: 'Ko-fi',        icon: '☕',  patterns: [/ko-fi\.com/i] },
-  { name: 'Steam',        icon: '🎮',  patterns: [/steamcommunity\.com/i, /store\.steampowered\.com/i] },
-  { name: 'Reddit',       icon: '🤖',  patterns: [/reddit\.com/i] },
-  { name: 'Spotify',      icon: '🎶',  patterns: [/spotify\.com/i] },
-  { name: 'SoundCloud',   icon: '🎵',  patterns: [/soundcloud\.com/i] },
-  { name: 'GitHub',       icon: '💻',  patterns: [/github\.com/i] },
-  { name: 'Kick',         icon: '🎬',  patterns: [/kick\.com/i] },
-  { name: 'Merch / Shop', icon: '🛍️', patterns: [/teespring\.com/i, /redbubble\.com/i, /teepublic\.com/i, /streamlabs\.com\/merch/i, /merch\./i] },
-  { name: 'Linktree',     icon: '🔗',  patterns: [/linktr\.ee/i] },
-];
-
-function detectPlatform(url) {
-  if (!url) return null;
-  for (const p of SOCIAL_PLATFORMS) {
-    if (p.patterns.some(re => re.test(url))) {
-      return { name: p.name, icon: p.icon };
-    }
-  }
-  return null;
-}
-
-// Extract all URLs from a string (including HTML hrefs)
-function extractUrls(text) {
-  if (!text) return [];
-  const re = /https?:\/\/[^\s"'<>)]+/gi;
-  return text.match(re) || [];
-}
-
-/**
- * Fetch channel panels via Twitch v5 (Kraken) API and detect social media links.
- * v5 requires: Accept: application/vnd.twitchtv.v5+json + Client-ID + OAuth token
- */
-async function checkPanels(userToken, broadcasterId) {
-  let panels = [];
-
-  try {
-    const res = await axios.get(`https://api.twitch.tv/kraken/channels/${broadcasterId}/panels`, {
-      headers: {
-        'Accept': 'application/vnd.twitchtv.v5+json',
-        'Client-ID': TWITCH_CLIENT_ID,
-        'Authorization': `OAuth ${userToken}`,
-      },
-    });
-    panels = res.data || [];
-  } catch (err) {
-    console.error('Panels check error:', err.response?.data || err.message);
-    return {
-      available: false,
-      note: 'Twitch v5 Panels API 目前無法存取（可能已停用）',
-      panels: [],
-      socialLinks: [],
-      checkedAt: new Date().toISOString(),
-    };
-  }
-
-  const socialLinks = [];
-  const seenPlatforms = new Set();
-
-  for (const panel of panels) {
-    const data = panel.data || {};
-    const sources = [
-      data.link,
-      data.description,
-      panel.html_description,
-    ];
-
-    // Collect direct link
-    if (data.link) {
-      const p = detectPlatform(data.link);
-      if (p && !seenPlatforms.has(p.name)) {
-        seenPlatforms.add(p.name);
-        socialLinks.push({ platform: p.name, icon: p.icon, url: data.link, title: data.title || '' });
-      }
-    }
-
-    // Scan URLs in description / html_description
-    for (const src of [data.description, panel.html_description]) {
-      for (const url of extractUrls(src)) {
-        const p = detectPlatform(url);
-        if (p && !seenPlatforms.has(p.name)) {
-          seenPlatforms.add(p.name);
-          socialLinks.push({ platform: p.name, icon: p.icon, url, title: data.title || '' });
-        }
-      }
-    }
-  }
-
-  return {
-    available: true,
-    totalPanels: panels.length,
-    detected: socialLinks.length > 0,
-    socialLinks,
-    checkedAt: new Date().toISOString(),
-  };
-}
 
 const RAID_FILE = path.join(__dirname, '../data/raid_history.json');
 
@@ -446,4 +343,4 @@ async function checkRaids(broadcasterId) {
   };
 }
 
-module.exports = { checkChatbots, checkPanels, checkGrowth, checkRaids, checkRoles };
+module.exports = { checkChatbots, checkGrowth, checkRaids, checkRoles };

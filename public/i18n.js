@@ -10,7 +10,7 @@ const TRANSLATIONS = {
       privacyNote: '僅讀取頻道所需資訊，不會儲存你的帳號密碼或 Token。',
     },
     features: {
-      title: '包含 6 大功能',
+      title: '包含 5 大功能',
       chatbot: { title: 'Chatbot 聊天機器人', desc: '偵測頻道版主列表中是否有 Nightbot、StreamElements、Moobot、Fossabot 等 20+ 種常見機器人帳號。', tags: ['Nightbot', 'StreamElements', 'Moobot', 'Fossabot', '+16 種'] },
       alerts:  { title: 'Twitch 官方通知設定', desc: 'Twitch 內建的通知功能，直接在創作者儀表板啟用，不需第三方工具，提供追蹤、訂閱、Bits、Raid 等事件通知。', tags: ['官方內建', '追蹤通知', '訂閱通知', 'Bits / Raid'] },
       growth:  { title: '追蹤與訂閱成長', desc: '顯示目前追蹤數與訂閱數，並與上次查詢比較成長變化，累積查詢後產生趨勢圖。', tags: ['追蹤者人數', '訂閱者人數', '趨勢圖表'] },
@@ -137,7 +137,7 @@ const TRANSLATIONS = {
       privacyNote: 'We only read the necessary channel info. Your password and tokens are never stored.',
     },
     features: {
-      title: '6 Features Included',
+      title: '5 Features Included',
       chatbot: { title: 'Chatbot Detection', desc: 'Detect if known bots like Nightbot, StreamElements, Moobot, or Fossabot are moderators in your channel.', tags: ['Nightbot', 'StreamElements', 'Moobot', 'Fossabot', '+16 more'] },
       alerts:  { title: 'Twitch Official Alerts', desc: "Twitch's built-in alert system, configurable directly in the Creator Dashboard — no third-party tools needed.", tags: ['Official', 'Follow Alerts', 'Sub Alerts', 'Bits / Raid'] },
       growth:  { title: 'Follower & Sub Growth', desc: 'View your current follower and subscriber counts, compare with last check, and track trends over time.', tags: ['Follower Count', 'Sub Count', 'Trend Chart'] },
@@ -264,7 +264,7 @@ const TRANSLATIONS = {
       privacyNote: '必要なチャンネル情報のみ取得します。パスワードやトークンは保存しません。',
     },
     features: {
-      title: '6つの主な機能',
+      title: '5つの主な機能',
       chatbot: { title: 'Chatbot検出', desc: 'Nightbot・StreamElements・Moobot・Fossabotなど20種以上のChatbotがモデレーターに登録されているか確認します。', tags: ['Nightbot', 'StreamElements', 'Moobot', 'Fossabot', '+16種'] },
       alerts:  { title: 'Twitch公式アラート設定', desc: 'Twitchの公式アラート機能。クリエイターダッシュボードから直接設定でき、サードパーティ製ツール不要です。', tags: ['公式機能', 'フォロー通知', 'サブ通知', 'Bits / Raid'] },
       growth:  { title: 'フォロワー＆サブ成長', desc: '現在のフォロワー数・サブ数を表示し、前回との差分を確認。履歴が蓄積されるとトレンドチャートを生成します。', tags: ['フォロワー数', 'サブ数', 'トレンドグラフ'] },
