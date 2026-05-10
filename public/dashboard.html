@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Twitch Channel Checker</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XWQM9KCR98"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XWQM9KCR98');
+  </script>
 </head>
 <body>
   <header class="top-bar">
@@ -464,6 +472,12 @@
         _lastData = await res.json();
         renderResults();
         document.getElementById('results').style.display = 'block';
+        gtag('event', 'check_complete', {
+          lang: getLang(),
+          chatbot_detected: _lastData.chatbot?.detected ? 1 : 0,
+          raids_count: _lastData.raids?.raids?.length ?? 0,
+          followers: _lastData.growth?.followerCount ?? 0,
+        });
       } catch (err) {
         const el = document.getElementById('error-wrap');
         el.textContent = t('dashboard.error') + err.message;
@@ -486,15 +500,12 @@
     }
 
     // ── Lang change callback ─────────────────────────────────────────
-    function onLangChange() {
+    function onLangChange(lang) {
       renderStaticText();
-      // Update logout button text
       const logoutEl = document.getElementById('txt-logout');
       if (logoutEl) logoutEl.textContent = t('dashboard.logout');
-      // Re-render result cards with new language if data exists
-      if (_lastData) {
-        renderResults();
-      }
+      if (_lastData) renderResults();
+      gtag('event', 'lang_switch', { lang });
     }
 
     // ── Init ─────────────────────────────────────────────────────────
