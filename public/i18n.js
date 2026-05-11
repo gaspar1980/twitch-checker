@@ -10,7 +10,7 @@ const TRANSLATIONS = {
       privacyNote: '僅讀取頻道所需資訊，不會儲存你的帳號密碼或 Token。',
     },
     features: {
-      title: '包含 8 大功能',
+      title: '包含 9 大功能',
       chatbot: { title: 'Chatbot 聊天機器人', desc: '偵測頻道版主列表中是否有 Nightbot、StreamElements、Moobot、Fossabot 等 20+ 種常見機器人帳號。', tags: ['Nightbot', 'StreamElements', 'Moobot', 'Fossabot', '+16 種'] },
       alerts:  { title: 'Twitch 官方通知設定', desc: 'Twitch 內建的通知功能，直接在創作者儀表板啟用，不需第三方工具，提供追蹤、訂閱、Bits、Raid 等事件通知。', tags: ['官方內建', '追蹤通知', '訂閱通知', 'Bits / Raid'] },
       growth:  { title: '追蹤與訂閱成長', desc: '顯示目前追蹤數與訂閱數，並與上次查詢比較成長變化，累積查詢後產生趨勢圖。', tags: ['追蹤者人數', '訂閱者人數', '趨勢圖表'] },
@@ -20,6 +20,7 @@ const TRANSLATIONS = {
       emotesBadges: { title: 'Emote 與 Badge', desc: '顯示頻道自訂表情符號和徽章，含圖片預覽，確認是否已設定訂閱 Emote 和頻道 Badge。', tags: ['訂閱 Emote', '頻道 Badge', 'Bits Emote'] },
       streamInfo:   { title: '直播狀態 / 頻道資訊', desc: '即時顯示是否在直播、標題、分類、觀眾數與縮圖，以及頻道語言與標籤。', tags: ['直播狀態', '觀眾數', '分類', '標籤'] },
       schedule:     { title: '直播排程', desc: '顯示你的開播排程，包含時間、分類、是否為每週重複。', tags: ['排程時間', '每週重複', '分類'] },
+      shareLink:    { title: '頻道連結分享', desc: '一鍵複製你的 Twitch 頻道網址，並自動產生 QR Code，方便分享到社群或活動現場。', tags: ['一鍵複製', 'QR Code', '社群分享'] },
     },
     steps: {
       title: '如何使用',
@@ -185,7 +186,7 @@ const TRANSLATIONS = {
       privacyNote: 'We only read the necessary channel info. Your password and tokens are never stored.',
     },
     features: {
-      title: '8 Features Included',
+      title: '9 Features Included',
       chatbot: { title: 'Chatbot Detection', desc: 'Detect if known bots like Nightbot, StreamElements, Moobot, or Fossabot are moderators in your channel.', tags: ['Nightbot', 'StreamElements', 'Moobot', 'Fossabot', '+16 more'] },
       alerts:  { title: 'Twitch Official Alerts', desc: "Twitch's built-in alert system, configurable directly in the Creator Dashboard — no third-party tools needed.", tags: ['Official', 'Follow Alerts', 'Sub Alerts', 'Bits / Raid'] },
       growth:  { title: 'Follower & Sub Growth', desc: 'View your current follower and subscriber counts, compare with last check, and track trends over time.', tags: ['Follower Count', 'Sub Count', 'Trend Chart'] },
@@ -195,6 +196,7 @@ const TRANSLATIONS = {
       emotesBadges: { title: 'Emotes & Badges', desc: 'Preview your custom channel emotes and badges with images — check if your sub emotes and channel badges are set up.', tags: ['Sub Emotes', 'Channel Badges', 'Bits Emotes'] },
       streamInfo:   { title: 'Live Status / Channel Info', desc: 'See if you are live, along with title, category, viewer count, thumbnail, language, and tags.', tags: ['Live Status', 'Viewers', 'Category', 'Tags'] },
       schedule:     { title: 'Stream Schedule', desc: 'View your streaming schedule including date, time, category, and recurring settings.', tags: ['Schedule', 'Recurring', 'Category'] },
+      shareLink:    { title: 'Channel Link & QR Code', desc: 'Easily share your channel link with one-click copy and auto-generated QR code — perfect for social media or events.', tags: ['One-Click Copy', 'QR Code', 'Share'] },
     },
     steps: {
       title: 'How It Works',
@@ -360,7 +362,7 @@ const TRANSLATIONS = {
       privacyNote: '必要なチャンネル情報のみ取得します。パスワードやトークンは保存しません。',
     },
     features: {
-      title: '8つの主な機能',
+      title: '9つの主な機能',
       chatbot: { title: 'Chatbot検出', desc: 'Nightbot・StreamElements・Moobot・Fossabotなど20種以上のChatbotがモデレーターに登録されているか確認します。', tags: ['Nightbot', 'StreamElements', 'Moobot', 'Fossabot', '+16種'] },
       alerts:  { title: 'Twitch公式アラート設定', desc: 'Twitchの公式アラート機能。クリエイターダッシュボードから直接設定でき、サードパーティ製ツール不要です。', tags: ['公式機能', 'フォロー通知', 'サブ通知', 'Bits / Raid'] },
       growth:  { title: 'フォロワー＆サブ成長', desc: '現在のフォロワー数・サブ数を表示し、前回との差分を確認。履歴が蓄積されるとトレンドチャートを生成します。', tags: ['フォロワー数', 'サブ数', 'トレンドグラフ'] },
@@ -370,6 +372,7 @@ const TRANSLATIONS = {
       emotesBadges: { title: 'EmoteとBadge', desc: 'チャンネルのカスタムEmoteとBadgeを画像プレビューつきで表示します。', tags: ['サブEmote', 'チャンネルBadge', 'Bits Emote'] },
       streamInfo:   { title: '配信状態 / チャンネル情報', desc: '配信中かどうか、タイトル・カテゴリ・視聴者数・サムネイル・言語・タグをリアルタイムで表示します。', tags: ['配信状態', '視聴者数', 'カテゴリ', 'タグ'] },
       schedule:     { title: '配信スケジュール', desc: '配信スケジュールを日時・カテゴリ・繰り返し設定とともに表示します。', tags: ['スケジュール', '毎週繰り返し', 'カテゴリ'] },
+      shareLink:    { title: 'チャンネルリンク＆QRコード', desc: 'ワンクリックでチャンネルリンクをコピーし、QRコードを自動生成。SNSやイベントでの共有に便利です。', tags: ['ワンクリックコピー', 'QRコード', '共有'] },
     },
     steps: {
       title: '使い方',
