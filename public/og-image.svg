@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#0e0e10"/>
+  <!-- Twitch Glitch Logo -->
+  <g transform="translate(500, 120) scale(3.2)">
+    <path d="M20 12L14 18v28h10v6l6-6h5l11-11V12H20zm22 16l-6 6h-6l-5 5v-5h-7V16h24v12z" fill="#9147ff"/>
+    <path d="M36 20h3v8h-3zm-8 0h3v8h-3z" fill="#9147ff"/>
+  </g>
+  <!-- Title -->
+  <text x="600" y="420" text-anchor="middle" fill="#efeff1" font-family="Inter,Segoe UI,sans-serif" font-size="48" font-weight="800">Twitch Channel Checker</text>
+  <!-- Subtitle -->
+  <text x="600" y="475" text-anchor="middle" fill="#adadb8" font-family="Inter,Segoe UI,sans-serif" font-size="24">Check your Chatbot, Alerts, Growth, Raids, Emotes &amp; more</text>
+  <!-- URL -->
+  <text x="600" y="560" text-anchor="middle" fill="#9147ff" font-family="Inter,Segoe UI,sans-serif" font-size="20" font-weight="600">twitch-checker-production.up.railway.app</text>
+  <!-- Accent line -->
+  <rect x="450" y="500" width="300" height="3" rx="2" fill="#9147ff" opacity="0.5"/>
+</svg>
