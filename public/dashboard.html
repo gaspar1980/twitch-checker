@@ -39,6 +39,18 @@
     </div>
 
     <div id="results" style="display:none">
+      <section class="check-card" id="card-stream-info">
+        <div class="card-header">
+          <span class="card-icon">📡</span>
+          <div>
+            <h2 id="card-stream-title"></h2>
+            <p class="card-desc" id="card-stream-desc"></p>
+          </div>
+          <div id="stream-status" class="status-badge"></div>
+        </div>
+        <div id="stream-detail" class="card-body"></div>
+      </section>
+
       <section class="check-card" id="card-chatbot">
         <div class="card-header">
           <span class="card-icon">🤖</span>
@@ -102,6 +114,18 @@
         <div id="emotes-detail" class="card-body"></div>
       </section>
 
+      <section class="check-card" id="card-schedule">
+        <div class="card-header">
+          <span class="card-icon">📅</span>
+          <div>
+            <h2 id="card-schedule-title"></h2>
+            <p class="card-desc" id="card-schedule-desc"></p>
+          </div>
+          <div id="schedule-status" class="status-badge"></div>
+        </div>
+        <div id="schedule-detail" class="card-body"></div>
+      </section>
+
       <section class="check-card" id="card-roles">
         <div class="card-header">
           <span class="card-icon">👥</span>
@@ -147,6 +171,8 @@
       document.getElementById('txt-loading').textContent = t('dashboard.loading');
       document.getElementById('lang-switcher').innerHTML = langSwitcherHTML();
 
+      document.getElementById('card-stream-title').textContent  = t('cards.streamInfo.title');
+      document.getElementById('card-stream-desc').textContent   = t('cards.streamInfo.desc');
       document.getElementById('card-chatbot-title').textContent = t('cards.chatbot.title');
       document.getElementById('card-chatbot-desc').textContent  = t('cards.chatbot.desc');
       document.getElementById('card-alerts-title').textContent  = t('cards.alerts.title');
@@ -156,6 +182,8 @@
       document.getElementById('card-growth-desc').textContent   = t('cards.growth.desc');
       document.getElementById('card-raids-title').textContent   = t('cards.raids.title');
       document.getElementById('card-raids-desc').textContent    = t('cards.raids.desc');
+      document.getElementById('card-schedule-title').textContent = t('cards.schedule.title');
+      document.getElementById('card-schedule-desc').textContent  = t('cards.schedule.desc');
       document.getElementById('card-emotes-title').textContent  = t('cards.emotesBadges.title');
       document.getElementById('card-emotes-desc').textContent   = t('cards.emotesBadges.desc');
       document.getElementById('card-roles-title').textContent   = t('cards.roles.title');
@@ -205,6 +233,94 @@
       const [label, cls] = map[type] || [type, 'status-unknown'];
       el.textContent = label;
       el.className = 'status-badge ' + cls;
+    }
+
+    // ── Stream Info ──────────────────────────────────────────────────
+    function renderStreamInfo(data) {
+      const el = document.getElementById('stream-detail');
+      const login = _lastData?.user?.login || '';
+
+      if (data.isLive) {
+        document.getElementById('stream-status').textContent = t('streamInfo.live');
+        document.getElementById('stream-status').className = 'status-badge status-live';
+      } else {
+        document.getElementById('stream-status').textContent = t('streamInfo.offline');
+        document.getElementById('stream-status').className = 'status-badge status-offline';
+      }
+
+      // Live stream section
+      let liveHtml = '';
+      if (data.isLive && data.stream) {
+        const s = data.stream;
+        const started = new Date(s.startedAt).toLocaleString(getLang());
+        liveHtml = `
+          <div class="stream-live-banner">
+            ${s.thumbnail ? `<img class="stream-thumb" src="${s.thumbnail}" alt="stream thumbnail" />` : ''}
+            <div class="stream-live-info">
+              <div class="stream-live-title">${s.title}</div>
+              <div class="stream-live-meta">
+                <span class="stream-game">${s.gameName || t('streamInfo.noGame')}</span>
+                <span class="stream-viewers">${t('streamInfo.viewers', { count: s.viewerCount.toLocaleString() })}</span>
+              </div>
+              <div class="stream-live-started">${t('streamInfo.startedAt', { time: started })}</div>
+              ${s.tags.length ? `<div class="stream-tags">${s.tags.map(tag => `<span class="ftag">${tag}</span>`).join('')}</div>` : ''}
+            </div>
+          </div>`;
+      }
+
+      // Channel info section
+      let channelHtml = '';
+      if (data.channel) {
+        const ch = data.channel;
+        const titleVal = ch.title || t('streamInfo.noTitle');
+        const gameVal = ch.gameName || t('streamInfo.noGame');
+        const titleClass = ch.title ? '' : ' no-result';
+        const gameClass = ch.gameName ? '' : ' no-result';
+
+        channelHtml = `
+          <div class="channel-info-grid">
+            <div class="ci-item">
+              <span class="ci-label">${t('streamInfo.title')}</span>
+              <span class="ci-value${titleClass}">${titleVal}</span>
+            </div>
+            <div class="ci-item">
+              <span class="ci-label">${t('streamInfo.game')}</span>
+              <span class="ci-value${gameClass}">${gameVal}</span>
+            </div>
+            <div class="ci-item">
+              <span class="ci-label">${t('streamInfo.language')}</span>
+              <span class="ci-value">${ch.language || '—'}</span>
+            </div>
+            ${ch.tags.length ? `<div class="ci-item ci-tags">
+              <span class="ci-label">${t('streamInfo.tags')}</span>
+              <div class="stream-tags">${ch.tags.map(tag => `<span class="ftag">${tag}</span>`).join('')}</div>
+            </div>` : ''}
+            ${ch.isBrandedContent ? `<div class="ci-item">
+              <span class="ci-label">${t('streamInfo.brandedContent')}</span>
+              <span class="ci-value">✓</span>
+            </div>` : ''}
+          </div>`;
+      }
+
+      // Setup guide when no title or game
+      const needSetup = !data.channel?.title || !data.channel?.gameName;
+      let setupHtml = '';
+      if (needSetup) {
+        const steps = t('streamInfo.setupSteps');
+        const stepsOl = Array.isArray(steps) ? steps.map(s => `<li>${s}</li>`).join('') : '';
+        setupHtml = `
+          <details class="howto-box" open>
+            <summary class="howto-toggle">${t('howto.prefix')}${t('streamInfo.setupTitle')}</summary>
+            <div class="howto-body">
+              <a href="${t('streamInfo.setupUrl', { login })}" target="_blank" rel="noopener noreferrer" class="roles-manage-btn" style="margin-bottom:12px">
+                ${t('streamInfo.setupBtn')}
+              </a>
+              <ol class="howto-ol">${stepsOl}</ol>
+            </div>
+          </details>`;
+      }
+
+      el.innerHTML = liveHtml + channelHtml + setupHtml;
     }
 
     // ── Chatbot ──────────────────────────────────────────────────────
@@ -471,6 +587,91 @@
         </div>`;
     }
 
+    // ── Schedule ──────────────────────────────────────────────────────
+    function renderSchedule(data) {
+      const el = document.getElementById('schedule-detail');
+      const login = _lastData?.user?.login || '';
+
+      if (data.hasSchedule && data.upcoming.length > 0) {
+        setStatus('schedule-status', 'ok');
+      } else if (data.hasSchedule) {
+        document.getElementById('schedule-status').textContent = t('schedule.hasSchedule');
+        document.getElementById('schedule-status').className = 'status-badge status-ok';
+      } else {
+        setStatus('schedule-status', 'notDetected');
+      }
+
+      // Vacation banner
+      let vacationHtml = '';
+      if (data.vacation) {
+        const s = new Date(data.vacation.start_time).toLocaleDateString(getLang());
+        const e = new Date(data.vacation.end_time).toLocaleDateString(getLang());
+        vacationHtml = `<div class="schedule-vacation">${t('schedule.vacation', { start: s, end: e })}</div>`;
+      }
+
+      // Schedule list
+      let listHtml = '';
+      if (data.segments.length > 0) {
+        const rows = data.segments.map(seg => {
+          const start = new Date(seg.startTime);
+          const end = new Date(seg.endTime);
+          const isPast = start < new Date();
+          const dateStr = start.toLocaleDateString(getLang(), { weekday: 'short', month: 'numeric', day: 'numeric' });
+          const timeStr = start.toLocaleTimeString(getLang(), { hour: '2-digit', minute: '2-digit' }) +
+                    ' — ' + end.toLocaleTimeString(getLang(), { hour: '2-digit', minute: '2-digit' });
+
+          const badges = [];
+          if (seg.isCanceled) badges.push(`<span class="sched-badge canceled">${t('schedule.canceled')}</span>`);
+          if (seg.isRecurring) badges.push(`<span class="sched-badge recurring">${t('schedule.recurring')}</span>`);
+          if (isPast && !seg.isCanceled) badges.push(`<span class="sched-badge past">${t('schedule.past')}</span>`);
+          if (!isPast && !seg.isCanceled) badges.push(`<span class="sched-badge upcoming">${t('schedule.upcoming')}</span>`);
+
+          return `
+            <div class="sched-row${seg.isCanceled ? ' canceled' : ''}">
+              <div class="sched-date">${dateStr}</div>
+              <div class="sched-body">
+                <div class="sched-title">${seg.title || '—'}</div>
+                <div class="sched-time">${timeStr}</div>
+                <div class="sched-cat">${seg.category ? t('schedule.category', { name: seg.category }) : t('schedule.noCategory')}</div>
+              </div>
+              <div class="sched-badges">${badges.join('')}</div>
+            </div>`;
+        }).join('');
+
+        listHtml = `
+          <p class="result-summary" style="margin-bottom:10px">${t('schedule.count', { count: data.total })}</p>
+          <div class="sched-list">${rows}</div>`;
+      }
+
+      // Setup guide when no schedule
+      let setupHtml = '';
+      if (!data.hasSchedule) {
+        const steps = t('schedule.setupSteps');
+        const stepsOl = Array.isArray(steps) ? steps.map(s => `<li>${s}</li>`).join('') : '';
+        setupHtml = `
+          <p class="result-summary no-result">${t('schedule.noSchedule')}</p>
+          <details class="howto-box" open>
+            <summary class="howto-toggle">${t('howto.prefix')}${t('schedule.setupTitle')}</summary>
+            <div class="howto-body">
+              <a href="${t('schedule.setupUrl', { login })}" target="_blank" rel="noopener noreferrer" class="roles-manage-btn" style="margin-bottom:12px">
+                ${t('schedule.setupBtn')}
+              </a>
+              <ol class="howto-ol">${stepsOl}</ol>
+            </div>
+          </details>`;
+      } else if (data.segments.length === 0) {
+        setupHtml = `<p class="result-summary no-result">${t('schedule.noSchedule')}</p>`;
+      }
+
+      el.innerHTML = `
+        <a href="${t('schedule.setupUrl', { login })}" target="_blank" rel="noopener noreferrer" class="roles-manage-btn">
+          ${t('schedule.setupBtn')}
+        </a>
+        ${vacationHtml}
+        ${listHtml}
+        ${setupHtml}`;
+    }
+
     // ── Roles ────────────────────────────────────────────────────────
     function renderRoles(data) {
       const el = document.getElementById('roles-detail');
@@ -558,11 +759,13 @@
 
     function renderResults() {
       if (!_lastData) return;
+      renderStreamInfo(_lastData.streamInfo);
       renderChatbot(_lastData.chatbot);
       renderAlerts();
       renderGrowth(_lastData.growth);
       renderRaids(_lastData.raids);
       renderEmotesBadges(_lastData.emotesBadges);
+      renderSchedule(_lastData.schedule);
       renderRoles(_lastData.roles);
     }
 

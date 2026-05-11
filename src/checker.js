@@ -413,4 +413,115 @@ async function checkEmotesBadges(userToken, broadcasterId) {
   };
 }
 
-module.exports = { checkChatbots, checkGrowth, checkRaids, checkRoles, checkEmotesBadges };
+/**
+ * Fetch live stream status + channel info.
+ * GET /helix/streams        — live status, viewer count, thumbnail
+ * GET /helix/channels       — title, game, language, tags
+ * No extra scope needed.
+ */
+async function checkStreamInfo(userToken, broadcasterId) {
+  const headers = twitchHeaders(userToken);
+
+  const [streamRes, channelRes] = await Promise.allSettled([
+    axios.get('https://api.twitch.tv/helix/streams', {
+      headers,
+      params: { user_id: broadcasterId },
+    }),
+    axios.get('https://api.twitch.tv/helix/channels', {
+      headers,
+      params: { broadcaster_id: broadcasterId },
+    }),
+  ]);
+
+  const streamData = streamRes.status === 'fulfilled' ? streamRes.value.data.data[0] || null : null;
+  const channelData = channelRes.status === 'fulfilled' ? channelRes.value.data.data[0] || null : null;
+
+  const isLive = !!streamData;
+  let thumbnail = null;
+  if (streamData?.thumbnail_url) {
+    thumbnail = streamData.thumbnail_url.replace('{width}', '440').replace('{height}', '248');
+  }
+
+  const hasCustomProfileImg = channelData?.profile_image_url && !channelData.profile_image_url.includes('user-default-pictures');
+
+  return {
+    isLive,
+    stream: isLive ? {
+      title: streamData.title,
+      gameName: streamData.game_name,
+      viewerCount: streamData.viewer_count,
+      startedAt: streamData.started_at,
+      thumbnail,
+      tags: streamData.tags || [],
+    } : null,
+    channel: channelData ? {
+      title: channelData.title,
+      gameName: channelData.game_name,
+      language: channelData.broadcaster_language,
+      tags: channelData.tags || [],
+      isBrandedContent: channelData.is_branded_content || false,
+      contentClassificationLabels: channelData.content_classification_labels || [],
+    } : null,
+    checkedAt: new Date().toISOString(),
+  };
+}
+
+/**
+ * Fetch stream schedule.
+ * GET /helix/schedule — upcoming scheduled segments
+ * No extra scope needed.
+ */
+async function checkSchedule(userToken, broadcasterId) {
+  const headers = twitchHeaders(userToken);
+
+  try {
+    const res = await axios.get('https://api.twitch.tv/helix/schedule', {
+      headers,
+      params: { broadcaster_id: broadcasterId, first: 10 },
+    });
+
+    const data = res.data.data;
+    const segments = (data?.segments || []).map(s => ({
+      id: s.id,
+      title: s.title,
+      startTime: s.start_time,
+      endTime: s.end_time,
+      category: s.category?.name || null,
+      isRecurring: s.is_recurring,
+      isCanceled: s.canceled_until !== null,
+    }));
+
+    const upcoming = segments.filter(s => !s.isCanceled && new Date(s.startTime) > new Date());
+
+    return {
+      hasSchedule: true,
+      vacation: data?.vacation || null,
+      segments,
+      upcoming,
+      total: segments.length,
+      checkedAt: new Date().toISOString(),
+    };
+  } catch (err) {
+    if (err.response?.status === 404) {
+      return {
+        hasSchedule: false,
+        vacation: null,
+        segments: [],
+        upcoming: [],
+        total: 0,
+        checkedAt: new Date().toISOString(),
+      };
+    }
+    console.error('Schedule check error:', err.response?.data || err.message);
+    return {
+      hasSchedule: false,
+      error: err.message,
+      segments: [],
+      upcoming: [],
+      total: 0,
+      checkedAt: new Date().toISOString(),
+    };
+  }
+}
+
+module.exports = { checkChatbots, checkGrowth, checkRaids, checkRoles, checkEmotesBadges, checkStreamInfo, checkSchedule };

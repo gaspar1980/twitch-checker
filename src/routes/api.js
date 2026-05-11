@@ -1,5 +1,5 @@
 const express = require('express');
-const { checkChatbots, checkGrowth, checkRaids, checkRoles, checkEmotesBadges } = require('../checker');
+const { checkChatbots, checkGrowth, checkRaids, checkRoles, checkEmotesBadges, checkStreamInfo, checkSchedule } = require('../checker');
 const router = express.Router();
 
 function requireAuth(req, res, next) {
@@ -19,12 +19,14 @@ router.get('/check', requireAuth, async (req, res) => {
   const { accessToken, user } = req.session;
 
   try {
-    const [chatbotResult, growthResult, raidResult, rolesResult, emotesResult] = await Promise.all([
+    const [chatbotResult, growthResult, raidResult, rolesResult, emotesResult, streamResult, scheduleResult] = await Promise.all([
       checkChatbots(accessToken, user.id),
       checkGrowth(accessToken, user.id),
       checkRaids(user.id),
       checkRoles(accessToken, user.id),
       checkEmotesBadges(accessToken, user.id),
+      checkStreamInfo(accessToken, user.id),
+      checkSchedule(accessToken, user.id),
     ]);
 
     res.json({
@@ -34,6 +36,8 @@ router.get('/check', requireAuth, async (req, res) => {
       raids: raidResult,
       roles: rolesResult,
       emotesBadges: emotesResult,
+      streamInfo: streamResult,
+      schedule: scheduleResult,
     });
   } catch (err) {
     console.error('Check error:', err.message);
