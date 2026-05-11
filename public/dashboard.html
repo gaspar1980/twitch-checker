@@ -39,6 +39,25 @@
       </button>
     </div>
 
+    <div id="share-section" class="share-section" style="display:none">
+      <div class="share-card">
+        <div class="share-left">
+          <h3 id="share-title"></h3>
+          <div class="share-url-row">
+            <input type="text" id="share-url" class="share-url-input" readonly />
+            <button id="share-copy-btn" class="share-copy-btn" onclick="copyChannelUrl()"></button>
+          </div>
+          <div class="share-btns">
+            <a id="share-visit" href="#" target="_blank" rel="noopener noreferrer" class="share-visit-btn"></a>
+          </div>
+        </div>
+        <div class="share-right">
+          <div class="share-qr-label" id="share-qr-label"></div>
+          <div id="share-qr" class="share-qr"></div>
+        </div>
+      </div>
+    </div>
+
     <div id="results" style="display:none">
       <section class="check-card" id="card-stream-info">
         <div class="card-header">
@@ -219,6 +238,40 @@
         <span>${user.displayName}</span>
         <a href="/auth/logout" class="btn-logout" id="txt-logout"></a>`;
       document.getElementById('txt-logout').textContent = t('dashboard.logout');
+      renderShareSection(user.login);
+    }
+
+    async function renderShareSection(login) {
+      const url = `https://www.twitch.tv/${login}`;
+      document.getElementById('share-title').textContent = t('share.title');
+      document.getElementById('share-url').value = url;
+      document.getElementById('share-copy-btn').textContent = t('share.copyBtn');
+      document.getElementById('share-visit').textContent = t('share.visitBtn');
+      document.getElementById('share-visit').href = url;
+      document.getElementById('share-qr-label').textContent = t('share.qrLabel');
+      document.getElementById('share-section').style.display = 'block';
+
+      try {
+        const res = await fetch(`/api/qrcode?url=${encodeURIComponent(url)}`);
+        if (res.ok) {
+          const { svg } = await res.json();
+          document.getElementById('share-qr').innerHTML = svg;
+        }
+      } catch (_) {}
+    }
+
+    function copyChannelUrl() {
+      const input = document.getElementById('share-url');
+      navigator.clipboard.writeText(input.value).then(() => {
+        const btn = document.getElementById('share-copy-btn');
+        btn.textContent = t('share.copied');
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = t('share.copyBtn');
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+      gtag('event', 'share_copy', { url: input.value });
     }
 
     // ── Status badge ─────────────────────────────────────────────────
@@ -777,6 +830,15 @@
       renderStaticText();
       const logoutEl = document.getElementById('txt-logout');
       if (logoutEl) logoutEl.textContent = t('dashboard.logout');
+      // Update share section text
+      const shareTitle = document.getElementById('share-title');
+      if (shareTitle) shareTitle.textContent = t('share.title');
+      const copyBtn = document.getElementById('share-copy-btn');
+      if (copyBtn && !copyBtn.classList.contains('copied')) copyBtn.textContent = t('share.copyBtn');
+      const visitBtn = document.getElementById('share-visit');
+      if (visitBtn) visitBtn.textContent = t('share.visitBtn');
+      const qrLabel = document.getElementById('share-qr-label');
+      if (qrLabel) qrLabel.textContent = t('share.qrLabel');
       if (_lastData) renderResults();
       gtag('event', 'lang_switch', { lang });
     }

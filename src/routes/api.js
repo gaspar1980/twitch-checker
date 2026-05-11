@@ -1,4 +1,5 @@
 const express = require('express');
+const QRCode = require('qrcode');
 const { checkChatbots, checkGrowth, checkRaids, checkRoles, checkEmotesBadges, checkStreamInfo, checkSchedule } = require('../checker');
 const router = express.Router();
 
@@ -89,5 +90,22 @@ router.get('/check/roles', requireAuth, async (req, res) => {
   }
 });
 
+
+// GET /api/qrcode?url=xxx — generate QR code SVG
+router.get('/qrcode', requireAuth, async (req, res) => {
+  const url = req.query.url;
+  if (!url) return res.status(400).json({ error: 'missing url param' });
+  try {
+    const svg = await QRCode.toString(url, {
+      type: 'svg',
+      color: { dark: '#9147ff', light: '#0e0e10' },
+      margin: 2,
+      width: 200,
+    });
+    res.json({ svg });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 module.exports = router;
