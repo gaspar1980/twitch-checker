@@ -1375,6 +1375,66 @@ details[open] .howto-toggle::after { transform: rotate(180deg); }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* Changelog */
+.cl-entry {
+  background: var(--bg-card);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.cl-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.cl-version {
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--purple-light);
+}
+
+.cl-date {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+.cl-list {
+  list-style: none;
+  padding: 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cl-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.cl-tag {
+  flex-shrink: 0;
+  border-radius: 4px;
+  padding: 1px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-top: 2px;
+}
+
+.cl-new     { background: rgba(0,201,128,0.12); color: var(--green); }
+.cl-improve { background: rgba(145,71,255,0.12); color: var(--purple-light); }
+.cl-change  { background: rgba(255,212,0,0.12); color: var(--yellow); }
+.cl-fix     { background: rgba(0,160,255,0.12); color: #66b3ff; }
+.cl-remove  { background: rgba(235,4,0,0.1); color: #ff6b6b; }
+
 @media (max-width: 600px) {
   .hero-card { padding: 32px 20px; }
   .dashboard { padding: 20px 16px; }

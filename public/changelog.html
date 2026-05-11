@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-TW" id="html-root">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Changelog — Twitch Channel Checker</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="logo small">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+          <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714z"/>
+        </svg>
+        <span id="txt-logo"></span>
+      </div>
+      <div class="top-bar-right">
+        <div class="lang-switcher" id="lang-switcher"></div>
+        <a href="/" class="btn-logout" id="txt-back"></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard">
+    <div class="dashboard-header">
+      <h1 id="txt-title"></h1>
+    </div>
+    <div id="changelog-content"></div>
+  </main>
+
+  <footer class="dashboard-footer">
+    Made by
+    <a href="https://www.threads.com/@gaspar.xie" target="_blank" rel="noopener noreferrer">@gaspar.xie</a>
+    <span class="footer-sep">·</span>
+    <a href="https://www.linkedin.com/in/yi-hung-hsieh-8a611b54/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  </footer>
+
+  <script src="i18n.js"></script>
+  <script>
+    const CHANGELOG = [
+      {
+        version: '1.7.0',
+        date: '2026-05-11',
+        zh: [
+          { type: 'new', text: '新增分享縮圖（Open Graph）和 Favicon' },
+          { type: 'new', text: '新增更新歷程頁面' },
+        ],
+        en: [
+          { type: 'new', text: 'Added Open Graph image and Favicon for link sharing' },
+          { type: 'new', text: 'Added Changelog page' },
+        ],
+        ja: [
+          { type: 'new', text: 'リンク共有用のOG画像とFaviconを追加' },
+          { type: 'new', text: '更新履歴ページを追加' },
+        ],
+      },
+      {
+        version: '1.6.0',
+        date: '2026-05-11',
+        zh: [
+          { type: 'new', text: '新增「📡 直播狀態 / 頻道資訊」卡片 — 即時顯示是否在直播、標題、分類、觀眾數、縮圖' },
+          { type: 'new', text: '新增「📅 直播排程」卡片 — 顯示開播排程、每週重複、休假模式' },
+          { type: 'improve', text: '未設定直播標題或排程時，自動顯示官方設定教學與連結' },
+        ],
+        en: [
+          { type: 'new', text: 'Added "📡 Live Status / Channel Info" card — real-time stream status, title, category, viewer count, thumbnail' },
+          { type: 'new', text: 'Added "📅 Stream Schedule" card — shows upcoming schedule, recurring, vacation mode' },
+          { type: 'improve', text: 'Auto-show setup guide when title or schedule is not configured' },
+        ],
+        ja: [
+          { type: 'new', text: '「📡 配信状態 / チャンネル情報」カードを追加 — リアルタイムの配信状態、タイトル、カテゴリ、視聴者数、サムネイル' },
+          { type: 'new', text: '「📅 配信スケジュール」カードを追加 — 今後の予定、毎週繰り返し、休暇モード' },
+          { type: 'improve', text: 'タイトルやスケジュールが未設定時に設定ガイドを自動表示' },
+        ],
+      },
+      {
+        version: '1.5.0',
+        date: '2026-05-11',
+        zh: [
+          { type: 'new', text: '新增「😄 Emote 與 Badge」卡片 — 顯示頻道自訂 Emote 和 Badge 圖片' },
+          { type: 'improve', text: '依訂閱方案 / Bits / 其他分類顯示 Emote' },
+        ],
+        en: [
+          { type: 'new', text: 'Added "😄 Emotes & Badges" card — preview custom emotes and badges with images' },
+          { type: 'improve', text: 'Emotes are grouped by subscription tier, Bits, and other types' },
+        ],
+        ja: [
+          { type: 'new', text: '「😄 EmoteとBadge」カードを追加 — カスタムEmoteとBadgeを画像プレビュー' },
+          { type: 'improve', text: 'Emoteをサブスクリプション・Bits・その他で分類表示' },
+        ],
+      },
+      {
+        version: '1.4.0',
+        date: '2026-05-11',
+        zh: [
+          { type: 'remove', text: '移除 Panel 社群連結卡片（Twitch v5 API 已停用）' },
+        ],
+        en: [
+          { type: 'remove', text: 'Removed Panel Social Links card (Twitch v5 API deprecated)' },
+        ],
+        ja: [
+          { type: 'remove', text: 'パネルSNSリンクカードを削除（Twitch v5 API廃止のため）' },
+        ],
+      },
+      {
+        version: '1.3.0',
+        date: '2026-05-11',
+        zh: [
+          { type: 'new', text: '新增繁體中文 / English / 日本語 三語言切換' },
+          { type: 'new', text: '新增「👥 頻道角色清單」卡片 — 版主、編輯、VIP 完整清單' },
+          { type: 'improve', text: '切換語言時不重新發 API 請求，直接用快取重新渲染' },
+          { type: 'new', text: '新增 Google Analytics 追蹤（含自訂事件）' },
+          { type: 'new', text: '頁尾新增開發者 Threads 和 LinkedIn 連結' },
+        ],
+        en: [
+          { type: 'new', text: 'Added language switcher: Traditional Chinese / English / Japanese' },
+          { type: 'new', text: 'Added "👥 Channel Roles" card — Moderators, Editors, VIPs' },
+          { type: 'improve', text: 'Language switch re-renders from cache without re-fetching API' },
+          { type: 'new', text: 'Added Google Analytics with custom events' },
+          { type: 'new', text: 'Added developer Threads and LinkedIn links in footer' },
+        ],
+        ja: [
+          { type: 'new', text: '言語切替を追加：繁体中国語 / English / 日本語' },
+          { type: 'new', text: '「👥 チャンネルロール」カードを追加 — モデレーター・エディター・VIP' },
+          { type: 'improve', text: '言語切替時にAPI再取得なしでキャッシュから再レンダリング' },
+          { type: 'new', text: 'Google Analyticsとカスタムイベントを追加' },
+          { type: 'new', text: 'フッターに開発者のThreadsとLinkedInリンクを追加' },
+        ],
+      },
+      {
+        version: '1.2.0',
+        date: '2026-05-11',
+        zh: [
+          { type: 'new', text: '新增「⚔️ Raid 記錄」卡片 — 透過 EventSub Webhook 監聽進出 Raid' },
+          { type: 'new', text: '新增「📈 追蹤與訂閱成長」卡片 — 追蹤數趨勢圖、與上次查詢比較' },
+          { type: 'improve', text: '每次查詢記錄快照，累積後產生趨勢圖表' },
+        ],
+        en: [
+          { type: 'new', text: 'Added "⚔️ Raid History" card — listens for raids via EventSub Webhook' },
+          { type: 'new', text: 'Added "📈 Follower & Sub Growth" card — trend chart, delta comparison' },
+          { type: 'improve', text: 'Each check saves a snapshot for trend tracking' },
+        ],
+        ja: [
+          { type: 'new', text: '「⚔️ Raid履歴」カードを追加 — EventSub WebhookでRaidを監視' },
+          { type: 'new', text: '「📈 フォロワー＆サブ成長」カードを追加 — トレンドグラフ・差分比較' },
+          { type: 'improve', text: '各チェック時にスナップショットを保存しトレンド追跡' },
+        ],
+      },
+      {
+        version: '1.1.0',
+        date: '2026-05-11',
+        zh: [
+          { type: 'new', text: '新增「🔗 Panel 社群連結」卡片 — 掃描 Panel 中的社群媒體連結' },
+          { type: 'change', text: '「🔔 Alerts」改為 Twitch 官方通知引導，移除第三方 EventSub 偵測' },
+        ],
+        en: [
+          { type: 'new', text: 'Added "🔗 Panel Social Links" card — scan panels for social media links' },
+          { type: 'change', text: 'Changed Alerts card to Twitch official Alerts guide, removed 3rd-party EventSub detection' },
+        ],
+        ja: [
+          { type: 'new', text: '「🔗 パネルSNSリンク」カードを追加 — パネルのSNSリンクをスキャン' },
+          { type: 'change', text: 'アラートカードをTwitch公式アラートガイドに変更、サードパーティEventSub検出を削除' },
+        ],
+      },
+      {
+        version: '1.0.0',
+        date: '2026-05-11',
+        zh: [
+          { type: 'new', text: '首次發佈' },
+          { type: 'new', text: 'Twitch OAuth 登入' },
+          { type: 'new', text: '「🤖 Chatbot」偵測 — 掃描版主列表比對 20+ 種已知機器人' },
+          { type: 'new', text: '「🔔 Alerts」偵測 — 透過 EventSub 訂閱偵測 Alert 服務' },
+          { type: 'new', text: '登入頁功能介紹 + 操作步驟說明' },
+        ],
+        en: [
+          { type: 'new', text: 'Initial release' },
+          { type: 'new', text: 'Twitch OAuth login' },
+          { type: 'new', text: '"🤖 Chatbot" detection — scans moderator list against 20+ known bots' },
+          { type: 'new', text: '"🔔 Alerts" detection — detects alert services via EventSub subscriptions' },
+          { type: 'new', text: 'Landing page with feature overview and step-by-step guide' },
+        ],
+        ja: [
+          { type: 'new', text: '初回リリース' },
+          { type: 'new', text: 'Twitch OAuthログイン' },
+          { type: 'new', text: '「🤖 Chatbot」検出 — モデレーターリストから20種以上の既知Botを検出' },
+          { type: 'new', text: '「🔔 アラート」検出 — EventSubサブスクリプションでアラートサービスを検出' },
+          { type: 'new', text: '機能紹介とステップバイステップガイド付きランディングページ' },
+        ],
+      },
+    ];
+
+    const LABELS = {
+      'zh-TW': { title: '更新歷程', back: '← 返回首頁', new: '新功能', improve: '優化', change: '變更', fix: '修正', remove: '移除' },
+      en:       { title: 'Changelog', back: '← Back to Home', new: 'New', improve: 'Improved', change: 'Changed', fix: 'Fixed', remove: 'Removed' },
+      ja:       { title: '更新履歴', back: '← ホームに戻る', new: '新機能', improve: '改善', change: '変更', fix: '修正', remove: '削除' },
+    };
+
+    function render() {
+      const lang = getLang();
+      const l = LABELS[lang] || LABELS.en;
+      const langKey = lang === 'zh-TW' ? 'zh' : lang;
+
+      document.getElementById('html-root').lang = lang;
+      document.title = l.title + ' — Twitch Channel Checker';
+      document.getElementById('txt-logo').textContent = t('site.logo');
+      document.getElementById('txt-title').textContent = l.title;
+      document.getElementById('txt-back').textContent = l.back;
+      document.getElementById('lang-switcher').innerHTML = langSwitcherHTML();
+
+      const typeClass = { new: 'cl-new', improve: 'cl-improve', change: 'cl-change', fix: 'cl-fix', remove: 'cl-remove' };
+
+      const html = CHANGELOG.map(entry => {
+        const items = entry[langKey] || entry.en;
+        const rows = items.map(item =>
+          `<li class="cl-item">
+            <span class="cl-tag ${typeClass[item.type] || ''}">${l[item.type] || item.type}</span>
+            <span>${item.text}</span>
+          </li>`
+        ).join('');
+        return `
+          <div class="cl-entry">
+            <div class="cl-header">
+              <span class="cl-version">v${entry.version}</span>
+              <span class="cl-date">${entry.date}</span>
+            </div>
+            <ul class="cl-list">${rows}</ul>
+          </div>`;
+      }).join('');
+
+      document.getElementById('changelog-content').innerHTML = html;
+    }
+
+    function onLangChange() { render(); }
+    render();
+  </script>
+</body>
+</html>
