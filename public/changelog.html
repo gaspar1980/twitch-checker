@@ -41,6 +41,82 @@
   <script>
     const CHANGELOG = [
       {
+        version: '2.1.0',
+        date: '2026-05-14',
+        zh: [
+          { type: 'new', text: '新增「⭐ 訂閱連結」產生器 — 自動產生 twitch.tv/subs/ 訂閱網址、一鍵複製、QR Code' },
+          { type: 'new', text: '新增省錢提示：用手機瀏覽器開啟訂閱連結可避免 App Store / Google Play 約 30% 平台抽成' },
+        ],
+        en: [
+          { type: 'new', text: 'Added "⭐ Subscribe Link" generator — auto-generates twitch.tv/subs/ URL, one-click copy, and QR Code' },
+          { type: 'new', text: 'Added money-saving tip: subscribe via mobile browser to avoid ~30% App Store / Google Play fees' },
+        ],
+        ja: [
+          { type: 'new', text: '「⭐ サブスクライブリンク」生成機能を追加 — twitch.tv/subs/ URLの自動生成、ワンクリックコピー、QRコード' },
+          { type: 'new', text: '節約ヒントを追加：モバイルブラウザ経由でサブスクすると約30%のプラットフォーム手数料を回避可能' },
+        ],
+        es: [
+          { type: 'new', text: 'Agregado generador de "⭐ Enlace de suscripción" — genera automáticamente URL twitch.tv/subs/, copia en un clic y QR' },
+          { type: 'new', text: 'Agregado consejo de ahorro: suscríbete vía navegador móvil para evitar ~30% de comisión de App Store / Google Play' },
+        ],
+      },
+      {
+        version: '2.0.0',
+        date: '2026-05-14',
+        zh: [
+          { type: 'new', text: '新增「🎬 精華剪輯」卡片 — 列出最近 20 個 Clips，含縮圖、觀看次數、建立者、時長' },
+          { type: 'new', text: '新增「🎯 創作者目標」卡片 — 顯示追蹤 / 訂閱目標的即時進度條' },
+          { type: 'new', text: '新增 🇪🇸 西班牙語（第 4 種語言）' },
+          { type: 'improve', text: 'Clips 和 Goals 都附帶官方教學連結和詳細設定步驟說明' },
+        ],
+        en: [
+          { type: 'new', text: 'Added "🎬 Clips" card — lists recent 20 clips with thumbnails, view counts, creator, duration' },
+          { type: 'new', text: 'Added "🎯 Creator Goals" card — shows follower/sub goal progress with gradient bar' },
+          { type: 'new', text: 'Added 🇪🇸 Spanish (4th language)' },
+          { type: 'improve', text: 'Clips and Goals include official tutorial links and detailed setup guides' },
+        ],
+        ja: [
+          { type: 'new', text: '「🎬 クリップ」カードを追加 — 最新20件のクリップをサムネイル・再生回数・作成者・長さ付きで表示' },
+          { type: 'new', text: '「🎯 クリエイターゴール」カードを追加 — フォロワー/サブゴール進捗をグラデーションバーで表示' },
+          { type: 'new', text: '🇪🇸 スペイン語を追加（第4言語）' },
+          { type: 'improve', text: 'クリップとゴールに公式チュートリアルリンクと詳細な設定ガイドを追加' },
+        ],
+        es: [
+          { type: 'new', text: 'Agregado tarjeta "🎬 Clips" — lista los 20 clips más recientes con miniaturas, vistas, creador y duración' },
+          { type: 'new', text: 'Agregado tarjeta "🎯 Objetivos del creador" — muestra progreso de objetivos con barra de degradado' },
+          { type: 'new', text: 'Agregado 🇪🇸 Español (4to idioma)' },
+          { type: 'improve', text: 'Clips y Objetivos incluyen enlaces a tutoriales oficiales y guías de configuración detalladas' },
+        ],
+      },
+      {
+        version: '1.9.0',
+        date: '2026-05-11',
+        zh: [
+          { type: 'new', text: '新增「📡 直播狀態 / 頻道資訊」卡片' },
+          { type: 'new', text: '新增「📅 直播排程」卡片' },
+          { type: 'new', text: '新增「😄 Emote 與 Badge」卡片 — 圖片預覽' },
+          { type: 'improve', text: '未設定標題、排程或 Emote 時自動顯示官方教學與設定連結' },
+        ],
+        en: [
+          { type: 'new', text: 'Added "📡 Live Status / Channel Info" card' },
+          { type: 'new', text: 'Added "📅 Stream Schedule" card' },
+          { type: 'new', text: 'Added "😄 Emotes & Badges" card with image preview' },
+          { type: 'improve', text: 'Auto-show official setup guides when title, schedule, or emotes are not configured' },
+        ],
+        ja: [
+          { type: 'new', text: '「📡 配信状態 / チャンネル情報」カードを追加' },
+          { type: 'new', text: '「📅 配信スケジュール」カードを追加' },
+          { type: 'new', text: '「😄 EmoteとBadge」カードを画像プレビュー付きで追加' },
+          { type: 'improve', text: 'タイトル・スケジュール・Emoteが未設定時に公式設定ガイドを自動表示' },
+        ],
+        es: [
+          { type: 'new', text: 'Agregado tarjeta "📡 Estado en vivo / Info del canal"' },
+          { type: 'new', text: 'Agregado tarjeta "📅 Horario de streams"' },
+          { type: 'new', text: 'Agregado tarjeta "😄 Emotes y Badges" con previsualización de imágenes' },
+          { type: 'improve', text: 'Muestra automáticamente guías de configuración cuando el título, horario o emotes no están configurados' },
+        ],
+      },
+      {
         version: '1.8.0',
         date: '2026-05-11',
         zh: [
@@ -211,6 +287,7 @@
       'zh-TW': { title: '更新歷程', back: '← 返回首頁', new: '新功能', improve: '優化', change: '變更', fix: '修正', remove: '移除' },
       en:       { title: 'Changelog', back: '← Back to Home', new: 'New', improve: 'Improved', change: 'Changed', fix: 'Fixed', remove: 'Removed' },
       ja:       { title: '更新履歴', back: '← ホームに戻る', new: '新機能', improve: '改善', change: '変更', fix: '修正', remove: '削除' },
+      es:       { title: 'Historial de cambios', back: '← Volver al inicio', new: 'Nuevo', improve: 'Mejorado', change: 'Cambiado', fix: 'Corregido', remove: 'Eliminado' },
     };
 
     function render() {
