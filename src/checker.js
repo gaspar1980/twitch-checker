@@ -524,4 +524,86 @@ async function checkSchedule(userToken, broadcasterId) {
   }
 }
 
-module.exports = { checkChatbots, checkGrowth, checkRaids, checkRoles, checkEmotesBadges, checkStreamInfo, checkSchedule };
+/**
+ * Fetch recent clips for the channel.
+ * GET /helix/clips — no extra scope needed
+ */
+async function checkClips(userToken, broadcasterId) {
+  const headers = twitchHeaders(userToken);
+
+  try {
+    const res = await axios.get('https://api.twitch.tv/helix/clips', {
+      headers,
+      params: { broadcaster_id: broadcasterId, first: 20 },
+    });
+
+    const clips = (res.data.data || []).map(c => ({
+      id: c.id,
+      url: c.url,
+      embedUrl: c.embed_url,
+      title: c.title,
+      creatorName: c.creator_name,
+      gameName: c.game_id ? null : null,
+      viewCount: c.view_count,
+      duration: c.duration,
+      thumbnailUrl: c.thumbnail_url,
+      createdAt: c.created_at,
+    }));
+
+    return {
+      hasClips: clips.length > 0,
+      clips,
+      total: clips.length,
+      checkedAt: new Date().toISOString(),
+    };
+  } catch (err) {
+    console.error('Clips check error:', err.response?.data || err.message);
+    return {
+      hasClips: false,
+      clips: [],
+      total: 0,
+      error: err.message,
+      checkedAt: new Date().toISOString(),
+    };
+  }
+}
+
+/**
+ * Fetch creator goals.
+ * GET /helix/goals — requires channel:read:goals scope
+ */
+async function checkGoals(userToken, broadcasterId) {
+  const headers = twitchHeaders(userToken);
+
+  try {
+    const res = await axios.get('https://api.twitch.tv/helix/goals', {
+      headers,
+      params: { broadcaster_id: broadcasterId },
+    });
+
+    const goals = (res.data.data || []).map(g => ({
+      id: g.id,
+      type: g.type,
+      description: g.description,
+      currentAmount: g.current_amount,
+      targetAmount: g.target_amount,
+      createdAt: g.created_at,
+    }));
+
+    return {
+      hasGoals: goals.length > 0,
+      goals,
+      checkedAt: new Date().toISOString(),
+    };
+  } catch (err) {
+    console.error('Goals check error:', err.response?.data || err.message);
+    return {
+      hasGoals: false,
+      goals: [],
+      error: err.message,
+      checkedAt: new Date().toISOString(),
+    };
+  }
+}
+
+module.exports = { checkChatbots, checkGrowth, checkRaids, checkRoles, checkEmotesBadges, checkStreamInfo, checkSchedule, checkClips, checkGoals };

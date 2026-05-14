@@ -1,6 +1,6 @@
 const express = require('express');
 const QRCode = require('qrcode');
-const { checkChatbots, checkGrowth, checkRaids, checkRoles, checkEmotesBadges, checkStreamInfo, checkSchedule } = require('../checker');
+const { checkChatbots, checkGrowth, checkRaids, checkRoles, checkEmotesBadges, checkStreamInfo, checkSchedule, checkClips, checkGoals } = require('../checker');
 const router = express.Router();
 
 function requireAuth(req, res, next) {
@@ -20,7 +20,7 @@ router.get('/check', requireAuth, async (req, res) => {
   const { accessToken, user } = req.session;
 
   try {
-    const [chatbotResult, growthResult, raidResult, rolesResult, emotesResult, streamResult, scheduleResult] = await Promise.all([
+    const [chatbotResult, growthResult, raidResult, rolesResult, emotesResult, streamResult, scheduleResult, clipsResult, goalsResult] = await Promise.all([
       checkChatbots(accessToken, user.id),
       checkGrowth(accessToken, user.id),
       checkRaids(user.id),
@@ -28,6 +28,8 @@ router.get('/check', requireAuth, async (req, res) => {
       checkEmotesBadges(accessToken, user.id),
       checkStreamInfo(accessToken, user.id),
       checkSchedule(accessToken, user.id),
+      checkClips(accessToken, user.id),
+      checkGoals(accessToken, user.id),
     ]);
 
     res.json({
@@ -39,6 +41,8 @@ router.get('/check', requireAuth, async (req, res) => {
       emotesBadges: emotesResult,
       streamInfo: streamResult,
       schedule: scheduleResult,
+      clips: clipsResult,
+      goals: goalsResult,
     });
   } catch (err) {
     console.error('Check error:', err.message);

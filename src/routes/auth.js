@@ -18,6 +18,7 @@ const SCOPES = [
   'moderator:read:followers',
   'channel:read:editors',
   'channel:read:vips',
+  'channel:read:goals',
 ].join(' ');
 
 router.get('/login', (req, res) => {
