@@ -33,7 +33,11 @@ const TRANSLATIONS = {
     footer: { note: '本工具為第三方工具，與 Twitch 官方無關。' },
     errors: { auth_failed: '登入失敗，請重試。', no_code: '授權過程發生錯誤，請重試。', access_denied: '你取消了授權。', default: '發生錯誤：' },
     dashboard: { title: '頻道檢查報告', startBtn: '開始檢查', recheckBtn: '重新檢查', checkingBtn: '檢查中...', loading: '正在檢查頻道設定，請稍候...', logout: '登出', error: '發生錯誤：' },
-    share: { title: '分享你的頻道', copyBtn: '複製連結', copied: '已複製！', qrLabel: 'QR Code', visitBtn: '前往頻道 ↗' },
+    share: {
+      title: '分享你的頻道', copyBtn: '複製連結', copied: '已複製！', qrLabel: 'QR Code', visitBtn: '前往頻道 ↗',
+      subTitle: '訂閱連結', subCopyBtn: '複製訂閱連結', subVisitBtn: '訂閱頁面 ↗', subQrLabel: '訂閱 QR',
+      subTip: '💡 用手機瀏覽器開啟此連結訂閱，可避免 App Store / Google Play 的平台抽成（約 30%），價格等同網頁版！',
+    },
     cards: {
       chatbot: { title: 'Chatbot 聊天機器人', desc: '檢查頻道版主列表中是否有已知的聊天機器人帳號' },
       alerts:  { title: 'Twitch 通知（Alerts by Twitch）', desc: 'Twitch 官方內建的通知功能，直接在創作者儀表板設定，無需第三方工具', goSetup: '前往設定 ↗' },
@@ -255,7 +259,11 @@ const TRANSLATIONS = {
     footer: { note: 'This is a third-party tool and is not affiliated with Twitch.' },
     errors: { auth_failed: 'Login failed. Please try again.', no_code: 'Authorization error. Please try again.', access_denied: 'You cancelled the authorization.', default: 'Error: ' },
     dashboard: { title: 'Channel Report', startBtn: 'Start Check', recheckBtn: 'Re-check', checkingBtn: 'Checking...', loading: 'Checking your channel settings, please wait...', logout: 'Logout', error: 'Error: ' },
-    share: { title: 'Share Your Channel', copyBtn: 'Copy Link', copied: 'Copied!', qrLabel: 'QR Code', visitBtn: 'Visit Channel ↗' },
+    share: {
+      title: 'Share Your Channel', copyBtn: 'Copy Link', copied: 'Copied!', qrLabel: 'QR Code', visitBtn: 'Visit Channel ↗',
+      subTitle: 'Subscribe Link', subCopyBtn: 'Copy Sub Link', subVisitBtn: 'Sub Page ↗', subQrLabel: 'Sub QR',
+      subTip: '💡 Open this link in a mobile browser to subscribe — avoids the ~30% App Store / Google Play platform fee. Same price as the web version!',
+    },
     cards: {
       chatbot: { title: 'Chatbot', desc: 'Check if known chatbot accounts are moderators in your channel' },
       alerts:  { title: 'Twitch Alerts (by Twitch)', desc: "Twitch's official built-in alert system — configure it directly in the Creator Dashboard", goSetup: 'Setup Guide ↗' },
@@ -477,7 +485,11 @@ const TRANSLATIONS = {
     footer: { note: 'これはサードパーティツールであり、Twitchとは無関係です。' },
     errors: { auth_failed: 'ログインに失敗しました。再試行してください。', no_code: '認証エラーが発生しました。再試行してください。', access_denied: '認証をキャンセルしました。', default: 'エラー：' },
     dashboard: { title: 'チャンネルレポート', startBtn: 'チェック開始', recheckBtn: '再チェック', checkingBtn: 'チェック中...', loading: 'チャンネル設定を確認中です。しばらくお待ちください...', logout: 'ログアウト', error: 'エラー：' },
-    share: { title: 'チャンネルを共有', copyBtn: 'リンクをコピー', copied: 'コピーしました！', qrLabel: 'QRコード', visitBtn: 'チャンネルへ ↗' },
+    share: {
+      title: 'チャンネルを共有', copyBtn: 'リンクをコピー', copied: 'コピーしました！', qrLabel: 'QRコード', visitBtn: 'チャンネルへ ↗',
+      subTitle: 'サブスクライブリンク', subCopyBtn: 'サブリンクをコピー', subVisitBtn: 'サブページへ ↗', subQrLabel: 'サブQR',
+      subTip: '💡 モバイルブラウザでこのリンクを開いてサブスクライブすると、App Store / Google Playの約30%のプラットフォーム手数料を回避できます。Web版と同じ価格です！',
+    },
     cards: {
       chatbot: { title: 'Chatbot', desc: 'チャンネルのモデレーターに既知のChatbotアカウントが含まれているか確認します' },
       alerts:  { title: 'Twitchアラート（Alerts by Twitch）', desc: 'Twitchの公式内蔵アラート機能。クリエイターダッシュボードから設定できます', goSetup: '設定ページへ ↗' },
@@ -699,7 +711,11 @@ const TRANSLATIONS = {
     footer: { note: 'Esta es una herramienta de terceros y no está afiliada con Twitch.' },
     errors: { auth_failed: 'Error de inicio de sesión. Inténtalo de nuevo.', no_code: 'Error de autorización. Inténtalo de nuevo.', access_denied: 'Cancelaste la autorización.', default: 'Error: ' },
     dashboard: { title: 'Informe del canal', startBtn: 'Iniciar verificación', recheckBtn: 'Re-verificar', checkingBtn: 'Verificando...', loading: 'Verificando la configuración de tu canal, por favor espera...', logout: 'Cerrar sesión', error: 'Error: ' },
-    share: { title: 'Comparte tu canal', copyBtn: 'Copiar enlace', copied: '¡Copiado!', qrLabel: 'Código QR', visitBtn: 'Visitar canal ↗' },
+    share: {
+      title: 'Comparte tu canal', copyBtn: 'Copiar enlace', copied: '¡Copiado!', qrLabel: 'Código QR', visitBtn: 'Visitar canal ↗',
+      subTitle: 'Enlace de suscripción', subCopyBtn: 'Copiar enlace de sub', subVisitBtn: 'Página de sub ↗', subQrLabel: 'QR de sub',
+      subTip: '💡 Abre este enlace en un navegador móvil para suscribirte — evita la comisión de ~30% de App Store / Google Play. ¡Mismo precio que la versión web!',
+    },
     cards: {
       chatbot: { title: 'Chatbot', desc: 'Verifica si hay cuentas de chatbot conocidas como moderadores en tu canal' },
       alerts:  { title: 'Alertas de Twitch (by Twitch)', desc: 'Sistema de alertas oficial integrado de Twitch — configúralo en el Panel de creador', goSetup: 'Guía de configuración ↗' },

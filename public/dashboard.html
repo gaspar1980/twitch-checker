@@ -56,6 +56,23 @@
           <div id="share-qr" class="share-qr"></div>
         </div>
       </div>
+      <div class="share-card share-sub-card">
+        <div class="share-left">
+          <h3 id="sub-title">⭐</h3>
+          <div class="share-url-row">
+            <input type="text" id="sub-url" class="share-url-input" readonly />
+            <button id="sub-copy-btn" class="share-copy-btn" onclick="copySubUrl()"></button>
+          </div>
+          <div class="share-btns">
+            <a id="sub-visit" href="#" target="_blank" rel="noopener noreferrer" class="share-visit-btn"></a>
+          </div>
+          <div class="sub-tip" id="sub-tip"></div>
+        </div>
+        <div class="share-right">
+          <div class="share-qr-label" id="sub-qr-label"></div>
+          <div id="sub-qr" class="share-qr"></div>
+        </div>
+      </div>
     </div>
 
     <div id="results" style="display:none">
@@ -271,19 +288,40 @@
 
     async function renderShareSection(login) {
       const url = `https://www.twitch.tv/${login}`;
+      const subUrl = `https://www.twitch.tv/subs/${login}`;
+
+      // Channel link
       document.getElementById('share-title').textContent = t('share.title');
       document.getElementById('share-url').value = url;
       document.getElementById('share-copy-btn').textContent = t('share.copyBtn');
       document.getElementById('share-visit').textContent = t('share.visitBtn');
       document.getElementById('share-visit').href = url;
       document.getElementById('share-qr-label').textContent = t('share.qrLabel');
+
+      // Subscribe link
+      document.getElementById('sub-title').textContent = '⭐ ' + t('share.subTitle');
+      document.getElementById('sub-url').value = subUrl;
+      document.getElementById('sub-copy-btn').textContent = t('share.subCopyBtn');
+      document.getElementById('sub-visit').textContent = t('share.subVisitBtn');
+      document.getElementById('sub-visit').href = subUrl;
+      document.getElementById('sub-qr-label').textContent = t('share.subQrLabel');
+      document.getElementById('sub-tip').textContent = t('share.subTip');
+
       document.getElementById('share-section').style.display = 'block';
 
+      // Generate QR codes in parallel
       try {
-        const res = await fetch(`/api/qrcode?url=${encodeURIComponent(url)}`);
-        if (res.ok) {
-          const { svg } = await res.json();
+        const [channelRes, subRes] = await Promise.all([
+          fetch(`/api/qrcode?url=${encodeURIComponent(url)}`),
+          fetch(`/api/qrcode?url=${encodeURIComponent(subUrl)}`),
+        ]);
+        if (channelRes.ok) {
+          const { svg } = await channelRes.json();
           document.getElementById('share-qr').innerHTML = svg;
+        }
+        if (subRes.ok) {
+          const { svg } = await subRes.json();
+          document.getElementById('sub-qr').innerHTML = svg;
         }
       } catch (_) {}
     }
@@ -300,6 +338,20 @@
         }, 2000);
       });
       gtag('event', 'share_copy', { url: input.value });
+    }
+
+    function copySubUrl() {
+      const input = document.getElementById('sub-url');
+      navigator.clipboard.writeText(input.value).then(() => {
+        const btn = document.getElementById('sub-copy-btn');
+        btn.textContent = t('share.copied');
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = t('share.subCopyBtn');
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+      gtag('event', 'share_sub_copy', { url: input.value });
     }
 
     // ── Status badge ─────────────────────────────────────────────────
@@ -983,6 +1035,16 @@
       if (visitBtn) visitBtn.textContent = t('share.visitBtn');
       const qrLabel = document.getElementById('share-qr-label');
       if (qrLabel) qrLabel.textContent = t('share.qrLabel');
+      const subTitle = document.getElementById('sub-title');
+      if (subTitle) subTitle.textContent = '⭐ ' + t('share.subTitle');
+      const subCopyBtn = document.getElementById('sub-copy-btn');
+      if (subCopyBtn && !subCopyBtn.classList.contains('copied')) subCopyBtn.textContent = t('share.subCopyBtn');
+      const subVisit = document.getElementById('sub-visit');
+      if (subVisit) subVisit.textContent = t('share.subVisitBtn');
+      const subQrLabel = document.getElementById('sub-qr-label');
+      if (subQrLabel) subQrLabel.textContent = t('share.subQrLabel');
+      const subTip = document.getElementById('sub-tip');
+      if (subTip) subTip.textContent = t('share.subTip');
       if (_lastData) renderResults();
       gtag('event', 'lang_switch', { lang });
     }

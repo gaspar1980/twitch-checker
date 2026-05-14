@@ -1027,6 +1027,22 @@ details[open] .howto-toggle::after { transform: rotate(180deg); }
   height: 100%;
 }
 
+.share-sub-card {
+  margin-top: 12px;
+  border: 1px solid rgba(145,71,255,0.2);
+}
+
+.sub-tip {
+  margin-top: 12px;
+  background: rgba(145,71,255,0.08);
+  border: 1px solid rgba(145,71,255,0.2);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  color: var(--purple-light);
+  line-height: 1.5;
+}
+
 @media (max-width: 500px) {
   .share-card { flex-direction: column; align-items: stretch; }
   .share-right { align-items: center; }
