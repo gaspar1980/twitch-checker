@@ -2,7 +2,7 @@
 const TRANSLATIONS = {
   'zh-TW': {
     site: { title: 'Twitch 頻道檢查工具', logo: 'Twitch 頻道檢查工具' },
-    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', 'ar-SA': 'عربي' },
+    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', pt: 'PT', 'ar-SA': 'عربي' },
     hero: {
       h1: '一鍵掌握你的頻道狀態',
       sub: '登入授權後，自動檢查 Chatbot、Alerts、成長數據、Raid 記錄與社群連結，幫助你確認頻道設定是否完整。',
@@ -228,7 +228,7 @@ const TRANSLATIONS = {
 
   'en': {
     site: { title: 'Twitch Channel Checker', logo: 'Twitch Channel Checker' },
-    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', 'ar-SA': 'عربي' },
+    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', pt: 'PT', 'ar-SA': 'عربي' },
     hero: {
       h1: 'Check Your Channel Setup in One Click',
       sub: 'After authorizing with Twitch, automatically check Chatbot, Alerts, growth stats, Raid history, and social links — all in one place.',
@@ -452,9 +452,235 @@ const TRANSLATIONS = {
     },
   },
 
+  'pt': {
+    site: { title: 'Twitch Channel Checker', logo: 'Twitch Channel Checker' },
+    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', pt: 'PT', 'ar-SA': 'عربي' },
+    hero: {
+      h1: 'Verifique sua Configuração de Canal em Um Clique',
+      sub: 'Após autorizar com a Twitch, verificamos automaticamente Chatbot, Alertas, estatísticas de crescimento, histórico de Raids e links sociais — tudo em um só lugar.',
+      loginBtn: 'Entrar com a Twitch',
+      privacyNote: 'Lemos apenas as informações necessárias do canal. Sua senha e tokens nunca são armazenados.',
+    },
+    features: {
+      title: '11 Funcionalidades Incluídas',
+      chatbot: { title: 'Detecção de Chatbot', desc: 'Detecta se bots conhecidos como Nightbot, StreamElements, Moobot ou Fossabot são moderadores no seu canal.', tags: ['Nightbot', 'StreamElements', 'Moobot', 'Fossabot', '+16 mais'] },
+      alerts:  { title: 'Alertas Oficiais da Twitch', desc: 'Sistema de alertas integrado da Twitch, configurável diretamente no Painel do Criador — sem necessidade de ferramentas de terceiros.', tags: ['Oficial', 'Alertas de Seguidor', 'Alertas de Assinatura', 'Bits / Raid'] },
+      growth:  { title: 'Crescimento de Seguidores e Assinantes', desc: 'Veja o número atual de seguidores e assinantes, compare com a última verificação e acompanhe tendências ao longo do tempo.', tags: ['Total de Seguidores', 'Total de Assinantes', 'Gráfico de Tendência'] },
+      raids:   { title: 'Histórico de Raids', desc: 'Escuta raids de entrada e saída via Webhook e registra o nome do canal, número de espectadores e horário.', tags: ['Raids Recebidas', 'Raids Enviadas', 'Estatísticas de Espectadores'] },
+      panels:  { title: 'Links Sociais dos Painéis', desc: 'Escaneia todos os painéis do canal e identifica links de Twitter/X, YouTube, Discord, Instagram e outras redes sociais.', tags: ['Twitter/X', 'YouTube', 'Discord', '+12 plataformas'] },
+      roles:        { title: 'Funções do Canal', desc: 'Lista todos os Moderadores, Editores e VIPs — uma visão completa de quem tem quais permissões no seu canal.', tags: ['Moderadores', 'Editores', 'VIPs'] },
+      emotesBadges: { title: 'Emotes e Emblemas', desc: 'Visualize os emotes e emblemas personalizados do seu canal com imagens — verifique se seus emotes de assinante e emblemas do canal estão configurados.', tags: ['Emotes de Assinante', 'Emblemas do Canal', 'Emotes de Bits'] },
+      streamInfo:   { title: 'Status da Live / Info do Canal', desc: 'Veja se você está em live, junto com título, categoria, número de espectadores, miniatura, idioma e tags.', tags: ['Status da Live', 'Espectadores', 'Categoria', 'Tags'] },
+      schedule:     { title: 'Agenda de Transmissões', desc: 'Veja sua agenda de transmissões, incluindo data, horário, categoria e configurações de recorrência.', tags: ['Agenda', 'Recorrente', 'Categoria'] },
+      shareLink:    { title: 'Link do Canal e QR Code', desc: 'Compartilhe facilmente o link do seu canal com cópia em um clique e QR code gerado automaticamente — perfeito para redes sociais ou eventos.', tags: ['Cópia em Um Clique', 'QR Code', 'Compartilhar'] },
+      clips:        { title: 'Clipes', desc: 'Lista os clipes recentes do seu canal com miniaturas, número de visualizações, nome do criador e duração.', tags: ['Destaques', 'Visualizações', 'Compartilhar'] },
+      goals:        { title: 'Metas do Criador', desc: 'Mostra o progresso e status atual da sua meta de seguidores ou assinantes.', tags: ['Meta de Seguidores', 'Meta de Assinantes', 'Progresso'] },
+    },
+    steps: {
+      title: 'Como Funciona',
+      s1: { title: 'Entrar', desc: 'Autorize com sua conta Twitch — apenas uma vez.' },
+      s2: { title: 'Verificação Automática', desc: 'Todas as verificações são feitas automaticamente após o login.' },
+      s3: { title: 'Ver Resultados', desc: 'Cada cartão mostra o status e inclui um guia de configuração.' },
+    },
+    footer: { note: 'Esta é uma ferramenta de terceiros e não é afiliada à Twitch.' },
+    errors: { auth_failed: 'Falha no login. Tente novamente.', no_code: 'Erro de autorização. Tente novamente.', access_denied: 'Você cancelou a autorização.', default: 'Erro: ' },
+    dashboard: { title: 'Relatório do Canal', startBtn: 'Iniciar Verificação', recheckBtn: 'Verificar Novamente', checkingBtn: 'Verificando...', loading: 'Verificando as configurações do seu canal, aguarde...', logout: 'Sair', error: 'Erro: ' },
+    share: {
+      title: 'Compartilhe seu Canal', copyBtn: 'Copiar Link', copied: 'Copiado!', qrLabel: 'QR Code', visitBtn: 'Visitar Canal ↗',
+      subTitle: 'Link de Assinatura', subCopyBtn: 'Copiar Link de Assinatura', subVisitBtn: 'Página de Assinatura ↗', subQrLabel: 'QR de Assinatura',
+      subTip: '💡 Abra este link em um navegador móvel para assinar — evita a taxa de ~30% da App Store / Google Play. Mesmo preço da versão web! (A taxa real pode variar por região e país)',
+    },
+    cards: {
+      chatbot: { title: 'Chatbot', desc: 'Verifica se contas de chatbot conhecidas são moderadoras do seu canal' },
+      alerts:  { title: 'Alertas da Twitch (pela Twitch)', desc: 'Sistema de alertas oficial e integrado da Twitch — configure diretamente no Painel do Criador', goSetup: 'Guia de Configuração ↗' },
+      growth:  { title: 'Crescimento de Seguidores e Assinantes', desc: 'Veja os totais atuais e compare as mudanças desde a última verificação' },
+      raids:   { title: 'Histórico de Raids', desc: 'Escuta raids de entrada e saída via EventSub e armazena o histórico' },
+      panels:  { title: 'Links Sociais dos Painéis', desc: 'Escaneia os painéis do canal em busca de links de redes sociais (Twitter/X, YouTube, Discord, etc.)' },
+      roles:        { title: 'Funções do Canal', desc: 'Veja todos os Moderadores, Editores e VIPs do seu canal', goSetup: 'Gerenciar Funções ↗' },
+      emotesBadges: { title: 'Emotes e Emblemas', desc: 'Visualize seus emotes e emblemas personalizados com imagens' },
+      streamInfo:   { title: 'Status da Live / Info do Canal', desc: 'Status da live em tempo real, título, categoria, espectadores e miniatura' },
+      schedule:     { title: 'Agenda de Transmissões', desc: 'Veja sua próxima agenda de transmissões' },
+      clips:        { title: 'Clipes', desc: 'Veja os clipes recentes do seu canal com miniaturas e número de visualizações' },
+      goals:        { title: 'Metas do Criador', desc: 'Veja o progresso da sua meta de seguidores/assinantes em tempo real' },
+    },
+    status: { ok: 'Detectado ✓', notDetected: 'Não Detectado', unknown: 'Indisponível', updated: 'Atualizado ✓', listening: 'Escutando ✓', failed: 'Assinatura Falhou', unavailable: 'Indisponível' },
+    chatbot: {
+      detected: 'Detectada(s) <strong>{count}</strong> conta(s) de bot conhecida(s):',
+      notDetected: 'Nenhum chatbot conhecido detectado na lista de moderadores.',
+      hint: 'Se o bot não for moderador ou não estiver em nossa lista de detecção, ele pode não ser encontrado.',
+      modRole: 'Moderador',
+    },
+    alerts: {
+      intro: 'Alertas da Twitch é um <strong>recurso oficial integrado</strong> configurável diretamente no Painel do Criador — sem necessidade de serviços de terceiros. Os alertas destacam interações da audiência (seguidores, assinaturas, Bits, raids, etc.) para energizar sua transmissão.',
+      officialBtn: '📖 Ver Guia Oficial de Configuração',
+      events: { follower: 'Novo Seguidor', subscribe: 'Nova Assinatura', gift: 'Assinatura de Presente', bits: 'Bits Enviados', raid: 'Raid', hype: 'Hype Train' },
+    },
+    growth: {
+      firstCheck: 'Primeira verificação — verifique novamente depois para ver as mudanças de crescimento',
+      prevCheck: 'Última verificação: {date}',
+      followers: 'Seguidores', subscribers: 'Assinantes',
+      subPoints: 'Pontos de Assinatura: {pts}', noAffiliate: 'Requer status de Afiliado', notAvailable: 'Indisponível',
+      firstQuery: 'Primeira verificação', noChange: '— Sem alteração',
+      trend: 'Tendência de seguidores (últimas {count} verificações)',
+    },
+    raids: {
+      incoming: 'Raid Recebida', outgoing: 'Raid Enviada',
+      badgeNew: 'Criado', badgeExists: 'Ativo', badgeErr: 'Erro',
+      summaryIn: 'Raids Recebidas', summaryOut: 'Raids Enviadas',
+      viewers: '{count} espectadores no total',
+      noRecords: 'Ainda não há histórico de raids. O EventSub está escutando — futuras raids serão registradas aqui.',
+      recentRecords: 'Últimos {count} registros:',
+      showMore: 'Mostrando os 20 mais recentes de {count} no total',
+      dirIn: '📥 Recebida', dirOut: '📤 Enviada', viewerCount: '{count} espectadores',
+    },
+    panels: {
+      found: 'Encontrado(s) <strong>{count}</strong> link(s) social(is) em <strong>{total}</strong> painéis:',
+      notFound: 'Nenhum link social conhecido encontrado em {count} painel(is).',
+      hint: 'Os links dos painéis devem incluir uma URL https:// completa para serem detectados.',
+      unavailable: 'Não foi possível obter informações dos painéis.',
+      linksCount: '{count} links ✓',
+    },
+    roles: {
+      moderators: 'Moderadores', editors: 'Editores do Canal', vips: 'VIPs',
+      modDesc: 'Pode gerenciar o chat, silenciar/banir usuários e mais',
+      editorDesc: 'Pode editar informações do canal, título da transmissão e categoria',
+      vipDesc: 'Emblema especial no chat; sem permissões de moderação',
+      empty: 'Ainda não há {role}',
+      errorFetch: 'Não foi possível obter (permissões insuficientes)',
+      totalCount: '{count} no total',
+      manageUrl: 'https://dashboard.twitch.tv/u/{login}/community/roles',
+      manageBtn: 'Gerenciar no Painel do Criador ↗',
+    },
+    emotesBadges: {
+      emotesTitle: 'Emotes Personalizados', badgesTitle: 'Emblemas do Canal',
+      subEmotes: 'Emotes de Assinante', bitsEmotes: 'Emotes de Bits', otherEmotes: 'Outros Emotes',
+      noEmotes: 'Nenhum emote configurado ainda (requer status de Afiliado)',
+      noBadges: 'Nenhum emblema de canal configurado ainda',
+      totalEmotes: '{count} emote(s)',
+      totalBadges: '{count} conjunto(s) de emblemas',
+      noAffiliate: 'Ainda não é Afiliado — emotes personalizados estão indisponíveis',
+      tier: 'Nível de Assinatura {tier}',
+      badgeSetSub: 'Emblema de Assinante', badgeSetBits: 'Emblema de Bits', badgeSetOther: 'Outro Emblema',
+      manageEmoteUrl: 'https://dashboard.twitch.tv/u/{login}/viewer-rewards/emotes',
+      manageEmoteBtn: 'Gerenciar Emotes ↗',
+    },
+    streamInfo: {
+      live: '🔴 EM LIVE', offline: '⚫ Offline',
+      viewers: '{count} espectadores', startedAt: 'Iniciada em: {time}',
+      title: 'Título', game: 'Categoria / Jogo', language: 'Idioma', tags: 'Tags',
+      noTitle: '(Nenhum título de transmissão definido)', noGame: '(Nenhuma categoria selecionada)',
+      brandedContent: 'Conteúdo Patrocinado',
+      setupTitle: 'Como configurar as informações do canal?',
+      setupUrl: 'https://dashboard.twitch.tv/u/{login}/stream-manager',
+      setupBtn: 'Ir para o Stream Manager ↗',
+      setupSteps: ['Entre na Twitch e abra o "Painel do Criador"', 'Clique em "Stream Manager" na barra lateral esquerda', 'Defina seu título, categoria e tags na área de informações da transmissão', 'Sua página de canal mostrará as informações atualizadas imediatamente'],
+    },
+    schedule: {
+      title: 'Agenda de Transmissões',
+      hasSchedule: 'Agenda definida',
+      noSchedule: 'Nenhuma agenda de transmissão configurada',
+      vacation: '🏖️ Férias: {start} até {end}',
+      upcoming: 'Em breve',
+      past: 'Encerrada',
+      recurring: 'Recorrente semanalmente',
+      canceled: 'Cancelada',
+      category: 'Categoria: {name}',
+      noCategory: 'Nenhuma categoria especificada',
+      count: '{count} segmento(s) agendado(s)',
+      setupTitle: 'Como configurar uma agenda de transmissões?',
+      setupUrl: 'https://dashboard.twitch.tv/u/{login}/settings/channel/schedule',
+      setupBtn: 'Ir para Configurações de Agenda ↗',
+      setupSteps: ['Entre na Twitch e abra o "Painel do Criador"', 'Clique em "Agenda" na barra lateral esquerda', 'Clique em "+ Adicionar Segmento" e defina data, horário, título e categoria', 'Marque "Recorrente" para repetir a agenda semanalmente', 'Depois de configurada, a agenda aparece na página do seu canal'],
+    },
+    clips: {
+      total: '{count} clipe(s)',
+      noClips: 'Nenhum clipe encontrado para este canal',
+      views: '{count} visualizações',
+      duration: '{sec}s',
+      createdBy: 'Por: {name}',
+      watchBtn: 'Assistir ↗',
+      manageUrl: 'https://dashboard.twitch.tv/u/{login}/content/clips',
+      manageBtn: 'Gerenciar Clipes ↗',
+      setupTitle: 'Como criar, editar e compartilhar clipes?',
+      setupSteps: [
+        'Enquanto assiste a uma live, clique no ícone "Clipe" abaixo do player (ou pressione Alt+X)',
+        'O sistema captura automaticamente os últimos 30 segundos',
+        'No editor de clipes, ajuste o horário de início e fim (até 60 segundos)',
+        'Digite um título chamativo para o clipe',
+        'Clique em "Publicar" — o clipe aparece na página do seu canal',
+        'Compartilhar: clique no botão "Compartilhar" na página do clipe para compartilhar no Twitter/X, Reddit, etc.',
+        'Gerenciar: vá até Painel do Criador > Conteúdo > Clipes para ver, excluir ou destacar clipes',
+      ],
+    },
+    goals: {
+      title: 'Metas do Criador',
+      noGoals: 'Nenhuma meta definida atualmente',
+      typeFollower: 'Meta de Seguidores', typeSubscription: 'Meta de Assinaturas', typeNewSubscription: 'Meta de Novas Assinaturas',
+      typeOther: 'Outra Meta',
+      progress: '{current} / {target}',
+      percent: '{pct}% concluído',
+      manageUrl: 'https://dashboard.twitch.tv/u/{login}/community/goals',
+      manageBtn: 'Gerenciar Metas ↗',
+      setupTitle: 'Como configurar Metas do Criador?',
+      setupSteps: [
+        'Entre na Twitch e abra o "Painel do Criador"',
+        'Clique em "Comunidade" > "Metas" na barra lateral esquerda',
+        'Clique em "Adicionar Meta"',
+        'Escolha um tipo de meta: Meta de Seguidores ou Meta de Assinaturas',
+        'Digite o número alvo (por exemplo, 100 seguidores)',
+        'Depois de ativada, a barra de progresso da meta aparece na sua transmissão',
+        'Os espectadores podem ver o progresso da meta no chat, incentivando a interação',
+      ],
+      officialUrl: 'https://help.twitch.tv/s/article/creator-goals',
+      officialBtn: '📖 Ver Guia Oficial',
+    },
+    howto: {
+      prefix: '📖 ',
+      chatbot: {
+        title: 'Como Instalar um Chatbot?',
+        sections: [
+          { name: 'Nightbot (Recomendado)', steps: ['Acesse nightbot.tv e entre com a Twitch', 'Clique em "Join Channel" para adicionar o Nightbot ao seu canal', 'Confirme que o Nightbot tem status de moderador na página de Moderadores', 'Volte ao painel para configurar comandos e respostas automáticas'] },
+          { name: 'StreamElements', steps: ['Acesse streamelements.com e entre com a Twitch', 'Navegue até "Chatbot" > "Join Channel"', 'Digite /mod streamelements no chat da Twitch para conceder status de moderador', 'Configure comandos, temporizadores e placares de líderes no painel'] },
+          { name: 'Moobot', steps: ['Acesse moo.bot e entre com a Twitch', 'Siga as instruções para adicionar o Moobot ao seu canal', 'Digite /mod moobot no chat para conceder status de moderador'] },
+        ],
+      },
+      alerts: {
+        title: 'Como Configurar os Alertas da Twitch?',
+        sections: [
+          { name: 'Configurar no Painel do Criador', steps: ['Entre na Twitch, clique no seu avatar → "Painel do Criador"', 'Encontre "Stream Manager" > "Alertas" na barra lateral esquerda', 'Clique em "Gerenciar Alertas" para abrir as configurações', 'Ative os tipos de alerta desejados (seguidor, assinatura, Bits, raid, etc.)', 'Personalize o texto, duração e animação de cada alerta', 'Clique em "Salvar"'] },
+          { name: 'Adicionar Overlay no OBS', steps: ['Após configurar, copie a URL do Widget de Alerta', 'No OBS, adicione uma nova "Fonte de Navegador"', 'Cole a URL do Widget e defina largura/altura', 'Posicione a fonte onde deseja que os alertas apareçam', 'Os alertas aparecerão automaticamente durante sua transmissão'] },
+          { name: 'Opções Personalizáveis', steps: ['Texto do alerta: personalize o modelo de mensagem (ex: "{name} acabou de seguir!")', 'Duração: quanto tempo o alerta fica na tela', 'Testar alerta: visualize instantaneamente na página de configurações', 'Fila: como alertas simultâneos são tratados'] },
+        ],
+      },
+      growth: {
+        title: 'Como Fazer seu Canal Crescer?',
+        sections: [
+          { name: 'Aumentar Seguidores', steps: ['Mantenha uma agenda de transmissões consistente', 'Lembre os espectadores de seguir no fim das transmissões', 'Compartilhe clipes no Twitter/X, TikTok e Instagram', 'Faça raid em outros streamers para expandir seu alcance'] },
+          { name: 'Alcançar Afiliado (desbloquear assinaturas)', steps: ['Transmita pelo menos 500 minutos em 30 dias', 'Transmita em pelo menos 7 dias diferentes em 30 dias', 'Tenha em média 3 espectadores simultâneos', 'Alcance 50 seguidores'] },
+          { name: 'Aumentar Assinaturas', steps: ['Crie benefícios exclusivos para assinantes (emotes, emblemas, comandos exclusivos)', 'Agradeça regularmente aos assinantes e dê reconhecimento especial', 'Realize eventos de assinatura por tempo limitado (Hype Train, Sub-a-thon)'] },
+        ],
+      },
+      raids: {
+        title: 'Como Fazer um Raid?',
+        sections: [
+          { name: 'Iniciar um Raid', steps: ['Digite /raid [nome do canal] no chat (ex: /raid ninja)', 'Uma contagem de 90 segundos começa — você pode cancelar durante esse tempo', 'Após a contagem, seus espectadores são transferidos para o canal de destino', 'Você também pode usar o botão "Raid" no Stream Manager'] },
+          { name: 'Configurar Definições de Raid', steps: ['Vá até Painel do Criador > Configurações > Canal', 'Na seção "Raids", defina quem pode fazer raid no seu canal', 'Opções: "Permitir todos", "Somente seguidores" ou "Somente amigos"'] },
+          { name: 'Construir uma Comunidade de Raids', steps: ['Entre em Discords da comunidade Twitch para se conectar com outros streamers', 'Avise seus espectadores para qual canal você vai fazer raid antes de terminar a transmissão', 'Dê as boas-vindas aos raiders no chat para ajudar a reter novos espectadores'] },
+        ],
+      },
+      panels: {
+        title: 'Como Adicionar Links Sociais nos Painéis?',
+        sections: [
+          { name: 'Adicionar um Painel', steps: ['Acesse a página do seu canal na Twitch enquanto estiver logado', 'Role até a área de painéis e clique em "+" para adicionar um painel', 'Selecione "Adicionar Painel de Texto ou Imagem"', 'Digite um título e cole sua URL social no campo de link', 'Clique em "Enviar" para salvar'] },
+          { name: 'Links Sociais Recomendados', steps: ['Twitter/X: compartilhe atualizações da transmissão', 'Discord: construa uma comunidade de fãs', 'YouTube: envie destaques da transmissão', 'Instagram / TikTok: vídeos curtos para aumentar seu alcance', 'Linktree: combine todos os links em uma só página'] },
+        ],
+      },
+    },
+  },
+
   'ja': {
     site: { title: 'Twitchチャンネルチェッカー', logo: 'Twitchチャンネルチェッカー' },
-    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', 'ar-SA': 'عربي' },
+    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', pt: 'PT', 'ar-SA': 'عربي' },
     hero: {
       h1: 'ワンクリックでチャンネル状態を確認',
       sub: 'Twitchで認証後、Chatbot・アラート・成長データ・Raid履歴・SNSリンクを自動チェックし、チャンネル設定を確認します。',
@@ -680,7 +906,7 @@ const TRANSLATIONS = {
 
   'es': {
     site: { title: 'Twitch Channel Checker', logo: 'Twitch Channel Checker' },
-    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', 'ar-SA': 'عربي' },
+    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', pt: 'PT', 'ar-SA': 'عربي' },
     hero: {
       h1: 'Verifica tu canal en un clic',
       sub: 'Después de autorizar con Twitch, verifica automáticamente Chatbot, Alertas, estadísticas de crecimiento, historial de Raids y más — todo en un solo lugar.',
@@ -906,7 +1132,7 @@ const TRANSLATIONS = {
 
   'de': {
     site: { title: 'Twitch Kanal-Checker', logo: 'Twitch Kanal-Checker' },
-    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', 'ar-SA': 'عربي' },
+    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', pt: 'PT', 'ar-SA': 'عربي' },
     hero: {
       h1: 'Deinen Kanal mit einem Klick prüfen',
       sub: 'Nach der Twitch-Autorisierung werden Chatbot, Alerts, Wachstumsdaten, Raid-Verlauf und Social Links automatisch geprüft — alles an einem Ort.',
@@ -1132,7 +1358,7 @@ const TRANSLATIONS = {
 
   'fr': {
     site: { title: 'Twitch Channel Checker', logo: 'Twitch Channel Checker' },
-    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', 'ar-SA': 'عربي' },
+    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', pt: 'PT', 'ar-SA': 'عربي' },
     hero: {
       h1: 'Vérifie ta chaîne en un clic',
       sub: 'Après autorisation Twitch, vérifie automatiquement Chatbot, Alertes, stats de croissance, historique des Raids et liens sociaux — le tout en un seul endroit.',
@@ -1358,7 +1584,7 @@ const TRANSLATIONS = {
 
   'en-GB': {
     site: { title: 'Twitch Channel Checker', logo: 'Twitch Channel Checker' },
-    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', 'ar-SA': 'عربي' },
+    lang: { 'zh-TW': '繁中', en: 'EN', ja: '日本語', es: 'ES', de: 'DE', fr: 'FR', 'en-GB': 'UK', pt: 'PT', 'ar-SA': 'عربي' },
     hero: {
       h1: 'Check Your Channel Setup in One Click',
       sub: 'After authorising with Twitch, automatically check Chatbot, Alerts, growth stats, Raid history, and social links — all in one place.',
@@ -1584,7 +1810,7 @@ const TRANSLATIONS = {
 };
 
 // ── Public API ──────────────────────────────────────────────────────
-const LANGS = ['zh-TW', 'en', 'ja', 'es', 'de', 'fr', 'en-GB'];
+const LANGS = ['zh-TW', 'en', 'ja', 'es', 'de', 'fr', 'en-GB', 'pt'];
 const DEFAULT_LANG = 'zh-TW';
 
 function getLang() {
